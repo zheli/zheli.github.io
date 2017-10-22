@@ -4,14 +4,14 @@ title: 5 things I learned using docker with bamboo
 date: 2015-08-01T10:09:25+00:00
 author: Zhe
 layout: post
-guid: http://www.systemsthoughts.com/?p=317
+guid: https://www.systemsthoughts.com/2015/5-things-i-learned-using-docker-for-bamboo/
 permalink: /2015/5-things-i-learned-using-docker-for-bamboo/
 dsq_thread_id:
   - 3992448483
 categories:
   - Tips
 ---
-I decided to try out Docker for [Keycrunch](http://www.keycrunch.com) acceptance tests because the currently test setup with Bamboo is slow and complicated. To my surprise it was much simpler than I thought. The main tools I was using are Docker, Docker Machine (for Mac) and Docker Compose. And here are five things that I&#8217;ve learned.
+I decided to try out Docker for [Keycrunch](https://www.keycrunch.com) acceptance tests because the currently test setup with Bamboo is slow and complicated. To my surprise it was much simpler than I thought. The main tools I was using are Docker, Docker Machine (for Mac) and Docker Compose. And here are five things that I&#8217;ve learned.
 
 ### docker-compose up and docker-compose run is not the same
 
@@ -85,7 +85,7 @@ And then do something to check if the bootstrap is finished, if it is run
 
 ### Three other things
 
-  * Dockerfile cannot read files in the parent folder, use volume or move your Dockerfile! <img src="http://i2.wp.com/www.systemsthoughts.com/wp-includes/images/smilies/simple-smile.png?w=1260" alt=":)" class="wp-smiley" style="height: 1em; max-height: 1em;" data-recalc-dims="1" />
+  * Dockerfile cannot read files in the parent folder, use volume or move your Dockerfile!
   * You will have to watch out for disk usage if the docker images are built on the fly (cleaning up old images constantly)
   * In Dockerfile, install your packages (pip install, npm install, etc) before copy all the files to minimize intermediate container images and make next build faster
 
