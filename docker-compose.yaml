@@ -8,8 +8,6 @@ services:
      - VIRTUAL_HOST=www.systemsthoughts.com
      - LETSENCRYPT_HOST=www.systemsthoughts.com
      - LETSENCRYPT_EMAIL=zhe@alienlynx.com
-    ports:
-     - "80:80"
     volumes:
       - "jekyll_build:/var/www:ro"
   jekyll:
