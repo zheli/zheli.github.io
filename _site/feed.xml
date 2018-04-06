@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Systems Thoughts</title>
+    <description>My thoughts on life, startup and software development
+</description>
+    <link>https://www.systemsthoughts.com/</link>
+    <atom:link href="https://www.systemsthoughts.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 06 Apr 2018 22:17:50 +0200</pubDate>
+    <lastBuildDate>Fri, 06 Apr 2018 22:17:50 +0200</lastBuildDate>
+    <generator>Jekyll v3.6.0</generator>
+    
+      <item>
+        <title>5 things I learned using docker with bamboo</title>
+        <description>&lt;p&gt;I decided to try out Docker for &lt;a href=&quot;https://www.keycrunch.com&quot;&gt;Keycrunch&lt;/a&gt; acceptance tests because the currently test setup with Bamboo is slow and complicated. To my surprise it was much simpler than I thought. The main tools I was using are Docker, Docker Machine (for Mac) and Docker Compose. And here are five things that I’ve learned.&lt;/p&gt;
+
+&lt;h3 id=&quot;docker-compose-up-and-docker-compose-run-is-not-the-same&quot;&gt;docker-compose up and docker-compose run is not the same&lt;/h3&gt;
+
+&lt;p&gt;While you can start your service inside the docker by both commands, &lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose run&lt;/code&gt;&lt;/strong&gt; will not expose any ports. So to debug, I ended up adding a ssh service and then start the container with &lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;Update: The document says you can use &lt;code&gt;--service-ports&lt;/code&gt; flag for &lt;strong&gt;&lt;code&gt;docker-compose run&lt;/code&gt;&lt;/strong&gt; to create the ports, which I have just found out 😀&lt;/span&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;use-external-link-to-between-system-and-acceptance-test&quot;&gt;Use external-link to between system and acceptance test&lt;/h3&gt;
+
+&lt;p&gt;Here is the docker-compose.yml file in the beginning (simplified version):&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;web:
+  build: .
+  ports:
+    - &quot;80:80&quot;
+    - &quot;443:443&quot;
+  links:
+    - mysql
+    - redis
+mysql:
+  image: mysql:5.5
+  environment:
+    MYSQL_ROOT_PASSWORD: docker
+redis:
+  image: redis:2.6
+test:
+  build: ../test-system
+  links:
+    - web
+&lt;/pre&gt;
+
+&lt;p&gt;One of the problems I have is that the part of the bootstrap process is in the entry script, and that takes some time to finish. So if I do&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up test&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;all the containers will start at the same time and test will be executed while web is still bootstrapping.&lt;/p&gt;
+
+&lt;p&gt;I solved it by using seperate docker-compose files and using external-link to connect them together. So for backend system:&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;web:
+  build: .
+  ports:
+    - &quot;80:80&quot;
+    - &quot;443:443&quot;
+  links:
+    - mysql
+    - redis
+mysql:
+  image: mysql:5.5
+  environment:
+    MYSQL_ROOT_PASSWORD: docker
+redis:
+  image: redis:2.6
+&lt;/pre&gt;
+
+&lt;p&gt;For test (backend is the project name for previous docker-compose project):&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;test:
+    build: .
+    external_links:
+        - backend_web_1:web
+&lt;/pre&gt;
+
+&lt;p&gt;Then you can easily just do it in two steps, first start backend&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose -p backend up -d&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And then do something to check if the bootstrap is finished, if it is run&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose -p qa up&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;three-other-things&quot;&gt;Three other things&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Dockerfile cannot read files in the parent folder, use volume or move your Dockerfile!&lt;/li&gt;
+  &lt;li&gt;You will have to watch out for disk usage if the docker images are built on the fly (cleaning up old images constantly)&lt;/li&gt;
+  &lt;li&gt;In Dockerfile, install your packages (pip install, npm install, etc) before copy all the files to minimize intermediate container images and make next build faster&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt; &lt;/p&gt;
+</description>
+        <pubDate>Sat, 01 Aug 2015 12:09:25 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2015/5-things-i-learned-using-docker-for-bamboo/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2015/5-things-i-learned-using-docker-for-bamboo/</guid>
+        
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>Set up Askbot project in Codeship</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://i0.wp.com/www.systemsthoughts.com/wp-content/uploads/2015/03/codeship.png&quot;&gt;&lt;img class=&quot;aligncenter wp-image-309&quot; src=&quot;http://i0.wp.com/www.systemsthoughts.com/wp-content/uploads/2015/03/codeship.png?resize=520%2C248&quot; alt=&quot;codeship&quot; data-recalc-dims=&quot;1&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;Update:&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;Askbot just &lt;a style=&quot;color: #ff0000;&quot; href=&quot;https://github.com/ASKBOT/askbot-devel/commit/929cba67ae17fc5183001adf4f732e30c0b635da&quot;&gt;upgraded&lt;/a&gt; their Django-avatar version so we don’t have to compile PIL anymore.&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://codeship.com&quot;&gt;Codeship&lt;/a&gt; is a great tool for private continuous integration system. But setting up a project that uses Askbot can be a bit troublesome, &lt;del&gt;since we have to compile PIL to support avatar module&lt;/del&gt; in &lt;a href=&quot;http://offerqa.com&quot;&gt;offerQA&lt;/a&gt;. &lt;del&gt;Mainly because it is not possible to symblink /usr/include/freetype2 to /usr/include/freetype. But later I realized that pip also searches in ~/.virtualenv/include folder so things became much easier.&lt;/del&gt; A local_setting file is also created specifically for Codeship database and Redis. Here is my setup commands:&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;pip install -r requirements-dev.txt
+pip install redis
+# Use settings for CI
+ln -s local_settings.ci local_settings.py
+# Sync your DB for django projects
+python manage.py syncdb --noinput
+# Run migrations for your django project
+python manage.py migrate --noinput
+&lt;/pre&gt;
+
+&lt;p&gt;And here is my test commands:&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;# Running your Django tests
+python manage.py test
+&lt;/pre&gt;
+
+&lt;p&gt;The local_settings.ci file:&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;# -*- coding: utf-8 -*-
+DATABASES = {
+    &amp;#039;default&amp;#039;: {
+        &amp;#039;ENGINE&amp;#039;: &amp;#039;django.db.backends.sqlite3&amp;#039;,
+        &amp;#039;NAME&amp;#039;: &amp;#039;default.db&amp;#039;,
+        &amp;#039;USER&amp;#039;: &amp;#039;&amp;#039;,
+        &amp;#039;PASSWORD&amp;#039;: &amp;#039;&amp;#039;,
+        &amp;#039;HOST&amp;#039;: &amp;#039;&amp;#039;,
+        &amp;#039;PORT&amp;#039;: &amp;#039;&amp;#039;
+    }
+}
+CACHES = {
+    &amp;#039;default&amp;#039;: {
+        &amp;#039;BACKEND&amp;#039;: &amp;#039;django.core.cache.backends.locmem.LocMemCache&amp;#039;,
+        &amp;#039;LOCATION&amp;#039;: &amp;#039;offerqa&amp;#039;,
+        &amp;#039;CACHE_TIMEOUT&amp;#039; : 60,
+        &amp;#039;KEY_PREFIX&amp;#039;: &amp;#039;askbot&amp;#039;,
+    }
+}
+&lt;/pre&gt;
+</description>
+        <pubDate>Mon, 23 Mar 2015 22:34:22 +0100</pubDate>
+        <link>https://www.systemsthoughts.com/2015/set-up-askbot-project-in-codeship/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2015/set-up-askbot-project-in-codeship/</guid>
+        
+        
+        <category>Django</category>
+        
+      </item>
+    
+      <item>
+        <title>No Django log printout in Gunicorn</title>
+        <description>&lt;p&gt;I found a weird problem when I tried to deploy a new project with Gunicorn this weekend. It seems Gunicorn has swallowed all Django printouts. No matter how I set up the project: change the logging settings in Django, add debug flag and set log level, I couldn’t get anything to show up.&lt;/p&gt;
+
+&lt;p&gt;After a couple of hours of trying and googling (!!!) I found an interesting comment in Stackoverflow, it seems Gunicorn has changed the default logging to not to print on the console in R19, but it is reverted back in R20. But if you are using R19, you can get Gunicorn to write log to console again by adding:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--log-file=-&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;flag to the command.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 19 Oct 2014 23:17:55 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2014/no-django-log-printout-in-gunicorn/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/no-django-log-printout-in-gunicorn/</guid>
+        
+        
+        <category>Django</category>
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>Tips for mocking in Python</title>
+        <description>&lt;h2 id=&quot;restore-patching&quot;&gt;Restore patching&lt;/h2&gt;
+
+&lt;p&gt;I like mocking and patching in unittest. And you shouldn’t forget to restore all the patchings also. I would think it should be put in the TearDown() method in a unittest. But it seems that I was wrong.&lt;/p&gt;
+
+&lt;p&gt;From the official document:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;…This method will &lt;strong&gt;only&lt;/strong&gt; be called if the setUp() succeeds, regardless of the outcome of the test method…&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So if there is an exception in setUp(), the patchings will not be restored. The correct way of doing it should be using the &lt;strong&gt;addCleanup()&lt;/strong&gt; method.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;…If setUp() fails, meaning that tearDown() is not called, then any cleanup functions added will still be called.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;And example if you use patch() as function.&lt;/p&gt;
+
+&lt;pre class=&quot;wp-code-highlight prettyprint&quot;&gt;class MyTest(TestCase):
+  def setUp(self):
+    patcher = patch(&amp;#039;package.module.Class&amp;#039;)
+    self.MockClass = patcher.start()
+    self.addCleanup(patcher.stop)
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;mock-the-base-class&quot;&gt;Mock the base class&lt;/h2&gt;
+
+&lt;p&gt;I am not sure if you should do that since I haven’t found too many articles on the internet. But I will put it here anyway. The base classes are defined in a class’s __bases__ attribute, but when I tried to patch it like other attribute using:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@mock.patch.object(ExtendedClass, '__bases__', (MockBaseClass,))&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;I got a TypeError:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TypeError: can't delete ExtendedClass.__bases__&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Looks like mock module is trying to remove it before reassign it. I had struggled for a few hours before I found out another simple way to do it:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ExtendedClass.__bases__ = (MockBaseClass,)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The only drawback is that you will have to restore the base class manually afterwards.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 17 Sep 2014 15:14:07 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2014/restore-patching-in-unittest-in-python/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/restore-patching-in-unittest-in-python/</guid>
+        
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>Setup a remote development environment with Vagrant, Salt and Digitalocean</title>
+        <description>&lt;p&gt;For years I have been doing web development on a lenovo S10 netbook via SSH. I like to be able to connect to it from anywhere in the world and resume my work by typing: &lt;code class=&quot;highlighter-rouge&quot;&gt;tmux -2u attach&lt;/code&gt;. But it also has some issues:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;sometimes the connection is very slow in other countries because I have to SSH to my home router in Sweden.&lt;/li&gt;
+  &lt;li&gt;the laptop is getting older and the fan makes lots of noise.&lt;/li&gt;
+  &lt;li&gt;I cannot do system snapshot like a virtual machine.&lt;/li&gt;
+  &lt;li&gt;I cannot suspend/resume the system remotely like a virtual machine.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Since I have been using Vagrant and Salt for my web service, I figured I could setup a remote development environment using Salt. All of my repositories are at Github and Bitbucket anyway. As for the VPS,  I chose &lt;a href=&quot;https://www.digitalocean.com/?refcode=90161394e6ce&quot;&gt;DigitalOcean&lt;/a&gt; because of their API, price and speed:) Here is the github repository for my vagrant and salt files: &lt;a href=&quot;https://github.com/zheli/dev-environment&quot;&gt;https://github.com/zheli/dev-environment&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 25 Jul 2014 15:35:52 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2014/setup-a-remote-development-environment-using-vagrant-and-salt/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/setup-a-remote-development-environment-using-vagrant-and-salt/</guid>
+        
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>Strange import error in Django</title>
+        <description>&lt;p&gt;Last night I started to have a string Import Error in my Django project in the development environment. It was working before and I haven’t changed any code yet.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-symptoms&quot;&gt;The Symptoms&lt;/h2&gt;
+
+&lt;p&gt;I have a utils folder at the root of my django project with the following structure:&lt;/p&gt;
+
+&lt;p&gt;`Last night I started to have a string Import Error in my Django project in the development environment. It was working before and I haven’t changed any code yet.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-symptoms-1&quot;&gt;The Symptoms&lt;/h2&gt;
+
+&lt;p&gt;I have a utils folder at the root of my django project with the following structure:&lt;/p&gt;
+
+&lt;p&gt;`&lt;/p&gt;
+
+&lt;p&gt;And the problem appears in my code when I use:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;from utils import log as logging&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;It gives me Import Error in some files but not all the files. Also if I use the shell I can load this module without problem. This whole thing is very strange. I checked the PYTHONPATH and PATH variable, but nothing seems to be wrong. So I created a new modules called libs with the same content and renamed the module name in all the code that complains import error.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;I decided to try to look into it again today to see if it can be fixed, but I couldn’t find anyone who has the same problem like me. Accidentally, I found an interesting comment:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;+1 just had similar problem to OP and removing *.pyc resolved it so thanks. this seems to work nicely&lt;code class=&quot;highlighter-rouge&quot;&gt;alias rmpyc=&quot;find . -name &quot;*.pyc&quot; -exec rm -rf {} \;&quot;&lt;/code&gt; to ‘clean’ a project&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;And it worked! So it is because of the *.pyc I got when I was working in other branches. I don’t know when Python will decide to recompile the *.pyc file (or perhaps git removed the .py file, but left the .pyc file, and the code wasn’t cleaned up). But this is definitely something you need can try next time when you have an “Import Error”&lt;/p&gt;
+</description>
+        <pubDate>Tue, 04 Feb 2014 14:15:45 +0100</pubDate>
+        <link>https://www.systemsthoughts.com/2014/strange-import-error-in-django/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/strange-import-error-in-django/</guid>
+        
+        <category>django</category>
+        
+        <category>python</category>
+        
+        <category>tip</category>
+        
+        
+        <category>Django</category>
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>Some tips with Raspberry Pi development</title>
+        <description>&lt;h3 id=&quot;change-the-permission-for-i2c&quot;&gt;Change the permission for i2c&lt;/h3&gt;
+
+&lt;p&gt;It is very annoying that you have to run your code with sudo to be able to use I2C. You can change it by doing this.&lt;/p&gt;
+
+&lt;p&gt;First add your user to i2c group:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo adduser pi i2c&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;then change the udev rules, here I changed rules for all the i2c devices. You have to edit 60-i2c-tools.rules file in your /lib/udev/rules.d/ folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo nano /lib/udev/rules.d/60-i2c-tools.rules&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And change the following from&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KERNEL==&quot;i2c-[0-9]*&quot;, GROUP=&quot;i2c&quot;, MODE=&quot;0660&quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;to&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KERNEL==&quot;i2c-[0-9]*&quot;, GROUP=&quot;i2c&quot;, MODE=&quot;0666&quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Save the file, type in the command below to reload udev rules.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo udevadm control --reload-rules&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 16 Nov 2013 15:56:57 +0100</pubDate>
+        <link>https://www.systemsthoughts.com/2013/some-tips-with-raspberry-pi-development/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/some-tips-with-raspberry-pi-development/</guid>
+        
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>SimCan Python extension for CrossControl CCSimTech API</title>
+        <description>&lt;p&gt;Not sure if anyone needs this:)&lt;/p&gt;
+
+&lt;p&gt;Finally finished my first Python extension written in C language. It was a good practice. I have forgotten a lot about C, especially the pointers:) So use this library at your own risk!&lt;/p&gt;
+
+&lt;p&gt;The library is compiled in Visual Studio 2008 Express Edition so it only supports 32bit Python 2.7.x. It also doesn’t support unicode. Should be enough for CAN message I guess. Another important thing to know is I am not sure whether it works with CCSimTech non-developer license. I might test it later after summer.&lt;/p&gt;
+
+&lt;p&gt;This library implemented CanOpen, CanClose and CanReceive functions.&lt;/p&gt;
+
+&lt;p&gt;The file and document can be found &lt;a href=&quot;https://github.com/zheli/PySimCan&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+</description>
+        <pubDate>Wed, 17 Jul 2013 19:25:40 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2013/simcan-python-extension-for-crosscontrol-ccsimtech-api/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/simcan-python-extension-for-crosscontrol-ccsimtech-api/</guid>
+        
+        
+        <category>New Project</category>
+        
+      </item>
+    
+      <item>
+        <title>Visual Studio 2008 Express Project Settings for Python C Extension</title>
+        <description>&lt;p&gt;Here are some notes for setting up VS 2008 Express C++ project for Python extension development. For detailed information, you should check out &lt;a href=&quot;http://docs.python.org/2/extending/windows.html&quot;&gt;the official document&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;project-type&quot;&gt;Project type&lt;/h3&gt;
+
+&lt;p&gt;Choose Visual C++-&amp;gt;Win32-&amp;gt;Win32 Project. The recommended project folder should be your Python source code folder.&lt;/p&gt;
+
+&lt;h3 id=&quot;application-settings&quot;&gt;Application settings&lt;/h3&gt;
+
+&lt;p&gt;In the application wizard, choose Application type: DLL. And check the box for “Empty project”.**&lt;/p&gt;
+
+&lt;p&gt;**&lt;/p&gt;
+
+&lt;h3 id=&quot;project-properties&quot;&gt;Project properties&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://i0.wp.com/www.systemsthoughts.com/wp-content/uploads/2013/07/configure_1.png&quot;&gt;&lt;img class=&quot;aligncenter size-medium wp-image-230&quot; alt=&quot;configure_1&quot; src=&quot;http://i2.wp.com/www.systemsthoughts.com/wp-content/uploads/2013/07/configure_1-300x209.png?fit=300%2C209&quot; data-recalc-dims=&quot;1&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;First choose Configuration-&amp;gt;All Configurations. In Configuration Properties-&amp;gt;Linker-&amp;gt;Command Line, add this into Additional options textbox:&lt;/p&gt;
+
+&lt;p&gt;`Here are some notes for setting up VS 2008 Express C++ project for Python extension development. For detailed information, you should check out &lt;a href=&quot;http://docs.python.org/2/extending/windows.html&quot;&gt;the official document&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;project-type-1&quot;&gt;Project type&lt;/h3&gt;
+
+&lt;p&gt;Choose Visual C++-&amp;gt;Win32-&amp;gt;Win32 Project. The recommended project folder should be your Python source code folder.&lt;/p&gt;
+
+&lt;h3 id=&quot;application-settings-1&quot;&gt;Application settings&lt;/h3&gt;
+
+&lt;p&gt;In the application wizard, choose Application type: DLL. And check the box for “Empty project”.**&lt;/p&gt;
+
+&lt;p&gt;**&lt;/p&gt;
+
+&lt;h3 id=&quot;project-properties-1&quot;&gt;Project properties&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://i0.wp.com/www.systemsthoughts.com/wp-content/uploads/2013/07/configure_1.png&quot;&gt;&lt;img class=&quot;aligncenter size-medium wp-image-230&quot; alt=&quot;configure_1&quot; src=&quot;http://i2.wp.com/www.systemsthoughts.com/wp-content/uploads/2013/07/configure_1-300x209.png?fit=300%2C209&quot; data-recalc-dims=&quot;1&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;First choose Configuration-&amp;gt;All Configurations. In Configuration Properties-&amp;gt;Linker-&amp;gt;Command Line, add this into Additional options textbox:&lt;/p&gt;
+
+&lt;p&gt;`&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;(for example, if the function name is initspam, this line should be /export:initspam)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then choose Debug configuration. In Configuration Properties-&amp;gt;C/C++-&amp;gt;General, added the following two folder into Additional Include Directories (only if you created your project in the Python source code folder):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;....\Include&lt;/li&gt;
+  &lt;li&gt;....\PC&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In Configuration Properties-&amp;gt;Linker-&amp;gt;General, change Output File to&lt;/p&gt;
+
+&lt;p style=&quot;padding-left: 30px;&quot;&gt;
+  $(OutDir)\$(ProjectName)_d.pyd
+&lt;/p&gt;
+
+&lt;p&gt;Additional Library Directories&lt;/p&gt;
+
+&lt;p style=&quot;padding-left: 30px;&quot;&gt;
+  ..\..\PCbuild
+&lt;/p&gt;
+
+&lt;p&gt;Finally, in Properties-&amp;gt;Linker-&amp;gt;Input, add Additional Dependencies&lt;/p&gt;
+
+&lt;p style=&quot;padding-left: 30px;&quot;&gt;
+  python27_d.lib
+&lt;/p&gt;
+
+&lt;p&gt;That’s it, you are done! Release configuration is almost the same just don’t forget to remove _d for output file and additional dependencies.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 16 Jul 2013 12:11:42 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2013/visual-studio-2008-express-project-settings-for-python-c-extension/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/visual-studio-2008-express-project-settings-for-python-c-extension/</guid>
+        
+        
+        <category>Tips</category>
+        
+      </item>
+    
+      <item>
+        <title>Why you should learn some JavaScript as a test developer</title>
+        <description>&lt;p&gt;As a test developer, I love making tools, and I like to share my tools. It is always great to hear about how cool your tools are or how much their lives have been made easier.&lt;/p&gt;
+
+&lt;p&gt;Most of my tools are written in Python. Simply because it is quick to prototype and there are lots of libraries around Internet.  But it has changed a bit after I started writing more JavaScript code in my current assignment. There are lots of new, exciting things happening around JS world now such as Meteor, AngularJS…&lt;/p&gt;
+
+&lt;p&gt;In the past it wasn’t easy to distribute my tools, one reason is that not everyone has Python on their machine. It is totally different with JS. If you have a browser, you can run my code. It can be remote on a server, it can also be in a local folder.&lt;/p&gt;
+
+&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;img class=&quot;aligncenter&quot; alt=&quot;&quot; src=&quot;https://raw.github.com/zheli/web-csv-plotter/master/screenshot.PNG&quot; width=&quot;320&quot; height=&quot;238&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;It is also super simple to have nice-looking UI in JS, because HTML/CSS is much easier to tweak. I am not saying I don’t like command-line interface, just sometimes it is more intuitive to have a cool graph. There are also many ready framework you can grab from the internet, including one of my favorite Twitter Bootstrap. Not to mention countless JS plugins to show off/manipulate your data.&lt;/p&gt;
+
+&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;img class=&quot;size-medium wp-image-189 aligncenter&quot; alt=&quot;angularjs&quot; src=&quot;http://i0.wp.com/www.systemsthoughts.com/wp-content/uploads/2013/05/angularjs-300x207.png?fit=300%2C207&quot; data-recalc-dims=&quot;1&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;To get work done quick, you might also need a good JS framework. There are never lack of framework options in JS world. And that is also a problem. Personally, I prefer AngularJS. The learning curve is not steep (at least in the beginning:)), and the built-in features are enough to put my ideas into applications. Also the code structure is very neat, which I like very much.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 12 May 2013 16:47:56 +0200</pubDate>
+        <link>https://www.systemsthoughts.com/2013/why-you-should-learn-some-javascript-as-a-test-developer/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/why-you-should-learn-some-javascript-as-a-test-developer/</guid>
+        
+        
+        <category>Thoughts</category>
+        
+      </item>
+    
+  </channel>
+</rss>

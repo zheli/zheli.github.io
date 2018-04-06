@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  web:
+    image: kyma/docker-nginx
+    restart: always
+    environment:
+     - VIRTUAL_HOST=www.systemsthoughts.com
+     - LETSENCRYPT_HOST=www.systemsthoughts.com
+     - LETSENCRYPT_EMAIL=zhe@alienlynx.com
+    volumes:
+      - "jekyll_build:/var/www:ro"
+  jekyll:
+    image: zheli/www.systemsthoughts.com
+    volumes:
+      - "jekyll_build:/srv/jekyll/_site"
+
+volumes:
+  jekyll_build:
