@@ -18,8 +18,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="description" content="Last week I moved parts of home-brewed automated test framework to the robot framework. It went smoother than I thought and the new framework offered more fu...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="https://www.systemsthoughts.com/2011/why-you-should-never-build-your-own-test-framework-at-work/">
-  <link rel="alternate" type="application/rss+xml" title="Systems Thoughts" href="https://www.systemsthoughts.com/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2011/why-you-should-never-build-your-own-test-framework-at-work/">
+  <link rel="alternate" type="application/rss+xml" title="Systems Thoughts" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -83,7 +83,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="post-content" itemprop="articleBody">
     <p>Last week I moved parts of home-brewed automated test framework to <a href="http://code.google.com/p/robotframework/">the robot framework</a>. It went smoother than I thought and the new framework offered more functionalities that I was hoping to implement but didn’t for the sake of time. I wonder why I chose to write my own framework in the first place, since Robot framework came out few years ago. (probably because that test framework started as an experiment at work and was in “trial” ever since)</p>
 
-<p><img src="https://www.systemsthoughts.com/assets/images/homebrew_pc.jpg" alt="Homebrew PC" /></p>
+<p><img src="http://localhost:4000/assets/images/homebrew_pc.jpg" alt="Homebrew PC" /></p>
 
 <p>It reminds me a tip in <a href="http://pragprog.com/book/prj/ship-it" target="_blank">“Ship It! A Practical Guide to Successful Software Projects”</a>: using an “off the shelf” test framework. To most of the people (including me), it seems unnecessary in the beginning to learn to use a new framework just for a simple task. If I can finish it in a few lines of code, why bother spending days pick up something from start? But what people fail to see is automated test grows. A test suite will stay with the project forever and be executed after every change (that’s why you automated it, right?). As software changes, new functionalities need to be added. A few lines become hundreds or thousands lines of code. If you are lucky like me who created their own framework, you will find most of time you spend are not adding new test cases or data into the suite, but maintaining the framework. Since the framework runs as much as the test cases, or even more, there will be plenty of bugs and issues rising up to the surface. But this wouldn’t happen if you implement your tests with well-known test framework, since there are more people maintaining and it comes far more comprehensive from start.</p>
 
