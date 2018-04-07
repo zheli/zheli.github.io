@@ -4,10 +4,10 @@
     <title>Systems Thoughts</title>
     <description>My thoughts on life, startup and software development
 </description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 06 Apr 2018 22:19:25 +0200</pubDate>
-    <lastBuildDate>Fri, 06 Apr 2018 22:19:25 +0200</lastBuildDate>
+    <link>https://www.systemsthoughts.com/</link>
+    <atom:link href="https://www.systemsthoughts.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 07 Apr 2018 09:57:03 +0200</pubDate>
+    <lastBuildDate>Sat, 07 Apr 2018 09:57:03 +0200</lastBuildDate>
     <generator>Jekyll v3.6.0</generator>
     
       <item>
@@ -95,8 +95,8 @@ redis:
 &lt;p&gt; &lt;/p&gt;
 </description>
         <pubDate>Sat, 01 Aug 2015 12:09:25 +0200</pubDate>
-        <link>http://localhost:4000/2015/5-things-i-learned-using-docker-for-bamboo/</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/5-things-i-learned-using-docker-for-bamboo/</guid>
+        <link>https://www.systemsthoughts.com/2015/5-things-i-learned-using-docker-for-bamboo/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2015/5-things-i-learned-using-docker-for-bamboo/</guid>
         
         
         <category>Tips</category>
@@ -153,8 +153,8 @@ CACHES = {
 &lt;/pre&gt;
 </description>
         <pubDate>Mon, 23 Mar 2015 22:34:22 +0100</pubDate>
-        <link>http://localhost:4000/2015/set-up-askbot-project-in-codeship/</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/set-up-askbot-project-in-codeship/</guid>
+        <link>https://www.systemsthoughts.com/2015/set-up-askbot-project-in-codeship/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2015/set-up-askbot-project-in-codeship/</guid>
         
         
         <category>Django</category>
@@ -174,8 +174,8 @@ CACHES = {
 &lt;p&gt;flag to the command.&lt;/p&gt;
 </description>
         <pubDate>Sun, 19 Oct 2014 23:17:55 +0200</pubDate>
-        <link>http://localhost:4000/2014/no-django-log-printout-in-gunicorn/</link>
-        <guid isPermaLink="true">http://localhost:4000/2014/no-django-log-printout-in-gunicorn/</guid>
+        <link>https://www.systemsthoughts.com/2014/no-django-log-printout-in-gunicorn/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/no-django-log-printout-in-gunicorn/</guid>
         
         
         <category>Django</category>
@@ -228,8 +228,8 @@ CACHES = {
 &lt;p&gt;The only drawback is that you will have to restore the base class manually afterwards.&lt;/p&gt;
 </description>
         <pubDate>Wed, 17 Sep 2014 15:14:07 +0200</pubDate>
-        <link>http://localhost:4000/2014/restore-patching-in-unittest-in-python/</link>
-        <guid isPermaLink="true">http://localhost:4000/2014/restore-patching-in-unittest-in-python/</guid>
+        <link>https://www.systemsthoughts.com/2014/restore-patching-in-unittest-in-python/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/restore-patching-in-unittest-in-python/</guid>
         
         
         <category>Tips</category>
@@ -250,8 +250,8 @@ CACHES = {
 &lt;p&gt;Since I have been using Vagrant and Salt for my web service, I figured I could setup a remote development environment using Salt. All of my repositories are at Github and Bitbucket anyway. As for the VPS,  I chose &lt;a href=&quot;https://www.digitalocean.com/?refcode=90161394e6ce&quot;&gt;DigitalOcean&lt;/a&gt; because of their API, price and speed:) Here is the github repository for my vagrant and salt files: &lt;a href=&quot;https://github.com/zheli/dev-environment&quot;&gt;https://github.com/zheli/dev-environment&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 25 Jul 2014 15:35:52 +0200</pubDate>
-        <link>http://localhost:4000/2014/setup-a-remote-development-environment-using-vagrant-and-salt/</link>
-        <guid isPermaLink="true">http://localhost:4000/2014/setup-a-remote-development-environment-using-vagrant-and-salt/</guid>
+        <link>https://www.systemsthoughts.com/2014/setup-a-remote-development-environment-using-vagrant-and-salt/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/setup-a-remote-development-environment-using-vagrant-and-salt/</guid>
         
         
         <category>Tips</category>
@@ -291,8 +291,8 @@ CACHES = {
 &lt;p&gt;And it worked! So it is because of the *.pyc I got when I was working in other branches. I don’t know when Python will decide to recompile the *.pyc file (or perhaps git removed the .py file, but left the .pyc file, and the code wasn’t cleaned up). But this is definitely something you need can try next time when you have an “Import Error”&lt;/p&gt;
 </description>
         <pubDate>Tue, 04 Feb 2014 14:15:45 +0100</pubDate>
-        <link>http://localhost:4000/2014/strange-import-error-in-django/</link>
-        <guid isPermaLink="true">http://localhost:4000/2014/strange-import-error-in-django/</guid>
+        <link>https://www.systemsthoughts.com/2014/strange-import-error-in-django/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2014/strange-import-error-in-django/</guid>
         
         <category>django</category>
         
@@ -334,8 +334,8 @@ CACHES = {
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo udevadm control --reload-rules&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Sat, 16 Nov 2013 15:56:57 +0100</pubDate>
-        <link>http://localhost:4000/2013/some-tips-with-raspberry-pi-development/</link>
-        <guid isPermaLink="true">http://localhost:4000/2013/some-tips-with-raspberry-pi-development/</guid>
+        <link>https://www.systemsthoughts.com/2013/some-tips-with-raspberry-pi-development/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/some-tips-with-raspberry-pi-development/</guid>
         
         
         <category>Tips</category>
@@ -357,8 +357,8 @@ CACHES = {
 &lt;p&gt; &lt;/p&gt;
 </description>
         <pubDate>Wed, 17 Jul 2013 19:25:40 +0200</pubDate>
-        <link>http://localhost:4000/2013/simcan-python-extension-for-crosscontrol-ccsimtech-api/</link>
-        <guid isPermaLink="true">http://localhost:4000/2013/simcan-python-extension-for-crosscontrol-ccsimtech-api/</guid>
+        <link>https://www.systemsthoughts.com/2013/simcan-python-extension-for-crosscontrol-ccsimtech-api/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/simcan-python-extension-for-crosscontrol-ccsimtech-api/</guid>
         
         
         <category>New Project</category>
@@ -435,8 +435,8 @@ CACHES = {
 &lt;p&gt;That’s it, you are done! Release configuration is almost the same just don’t forget to remove _d for output file and additional dependencies.&lt;/p&gt;
 </description>
         <pubDate>Tue, 16 Jul 2013 12:11:42 +0200</pubDate>
-        <link>http://localhost:4000/2013/visual-studio-2008-express-project-settings-for-python-c-extension/</link>
-        <guid isPermaLink="true">http://localhost:4000/2013/visual-studio-2008-express-project-settings-for-python-c-extension/</guid>
+        <link>https://www.systemsthoughts.com/2013/visual-studio-2008-express-project-settings-for-python-c-extension/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/visual-studio-2008-express-project-settings-for-python-c-extension/</guid>
         
         
         <category>Tips</category>
@@ -464,8 +464,8 @@ CACHES = {
 &lt;p&gt;To get work done quick, you might also need a good JS framework. There are never lack of framework options in JS world. And that is also a problem. Personally, I prefer AngularJS. The learning curve is not steep (at least in the beginning:)), and the built-in features are enough to put my ideas into applications. Also the code structure is very neat, which I like very much.&lt;/p&gt;
 </description>
         <pubDate>Sun, 12 May 2013 16:47:56 +0200</pubDate>
-        <link>http://localhost:4000/2013/why-you-should-learn-some-javascript-as-a-test-developer/</link>
-        <guid isPermaLink="true">http://localhost:4000/2013/why-you-should-learn-some-javascript-as-a-test-developer/</guid>
+        <link>https://www.systemsthoughts.com/2013/why-you-should-learn-some-javascript-as-a-test-developer/</link>
+        <guid isPermaLink="true">https://www.systemsthoughts.com/2013/why-you-should-learn-some-javascript-as-a-test-developer/</guid>
         
         
         <category>Thoughts</category>
