@@ -12,11 +12,15 @@ github_username: zheli
 markdown: kramdown
 theme: jekyll-theme-hacker
 plugins:
-  - jekyll-feed
   - jekyll-archives
-  - jekyll-paginate
-  - jekyll-sitemap
+  - jekyll-feed
   - jekyll-google-tag-manager
+  - jekyll-mentions
+  - jekyll-paginate
+  - jekyll-redirect-from
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jemoji
 
 # google tag manager plugin
 google:
