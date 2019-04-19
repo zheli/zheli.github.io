@@ -10,7 +10,7 @@ github_username: zheli
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-hacker
+
 plugins:
   - jekyll-archives
   - jekyll-feed
