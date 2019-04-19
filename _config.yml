@@ -1,10 +1,10 @@
 # Site settings
 title: Systems Thoughts
-email: zhe@alienlynx.com
+email: linuxcity.jn+systemsthoughts@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   My thoughts on life, startup and software development
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://www.systemsthoughts.com" # the base hostname & protocol for your site
+url: "https://systemsthoughts.com" # the base hostname & protocol for your site
 twitter_username: linuxcity
 github_username: zheli
 
@@ -14,17 +14,9 @@ theme: jekyll-theme-hacker
 plugins:
   - jekyll-archives
   - jekyll-feed
-  # As of 2019-04-19, Google Tag Manage is not supported by Github.
-  # - jekyll-google-tag-manager
   - jekyll-mentions
   - jekyll-paginate
   - jekyll-redirect-from
   - jekyll-seo-tag
   - jekyll-sitemap
   - jemoji
-
-# As of 2019-04-19, Google Tag Manage is not supported by Github.
-# google tag manager plugin
-# google:
-#   tag_manager:
-#     container_id: GTM-NV9DGMR
