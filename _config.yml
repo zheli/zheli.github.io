@@ -16,6 +16,7 @@ plugins:
   - jekyll-archives
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-google-tag-manager
 
 # google tag manager plugin
 google:
