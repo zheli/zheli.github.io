@@ -2,3 +2,4 @@
 .jekyll-metadata
 Session.vim
 *.swp
+.DS_Store
