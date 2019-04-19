@@ -14,6 +14,7 @@ categories:
 Just started a new project called Bring Umbrella. One reason is that I want to polish my Django skills, another reason is that I want to practice lean startup concepts  with a small project.
 
 ### The Idea
+![](http://i1.wp.com/farm5.staticflickr.com/4088/5038506989_6956c669d1.jpg?resize=240%2C240)
 
 I got the idea when I was caught in the rain without an umbrella. For many times I wish there could be a service to remind me bringing the umbrella before I go out in the morning.
 
@@ -36,5 +37,3 @@ Another thing is that the weather information should be pushed to users, not pul
 ### Interested?
 
 I have built a MVP for this concept (absolute MVP, you will know when you start to use it) and you can leave a message if you would like to try it.<figure style="width: 240px;" class="wp-caption aligncenter">
-
-[<img src="http://i1.wp.com/farm5.staticflickr.com/4088/5038506989_6956c669d1.jpg?resize=240%2C240" alt="" data-recalc-dims="1" />](http://www.flickr.com/photos/joostem/5038506989/ "It was a sunny rainy day... by Joostem, on Flickr")<figcaption class="wp-caption-text">From Joostem CC BY-ND 2.0</figcaption></figure>
