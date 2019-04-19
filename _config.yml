@@ -14,7 +14,8 @@ theme: jekyll-theme-hacker
 plugins:
   - jekyll-archives
   - jekyll-feed
-  - jekyll-google-tag-manager
+  # As of 2019-04-19, Google Tag Manage is not supported by Github.
+  # - jekyll-google-tag-manager
   - jekyll-mentions
   - jekyll-paginate
   - jekyll-redirect-from
@@ -22,7 +23,8 @@ plugins:
   - jekyll-sitemap
   - jemoji
 
+# As of 2019-04-19, Google Tag Manage is not supported by Github.
 # google tag manager plugin
-google:
-  tag_manager:
-    container_id: GTM-NV9DGMR
+# google:
+#   tag_manager:
+#     container_id: GTM-NV9DGMR
