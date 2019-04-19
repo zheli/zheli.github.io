@@ -10,6 +10,12 @@ github_username: zheli
 
 # Build settings
 markdown: kramdown
+theme: jekyll-theme-hacker
+plugins:
+  - jekyll-feed
+  - jekyll-archives
+  - jekyll-paginate
+  - jekyll-sitemap
 
 # google tag manager plugin
 google:
