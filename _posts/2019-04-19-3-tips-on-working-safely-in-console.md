@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "3 Tips on working securely and safely with operation"
+title:  "3 Tips on working securely and safely with Kubernetes and operations"
 date: 2019-04-19 21:10:23 +0200
 categories:
   - Tips
@@ -18,7 +18,7 @@ Personally I would recommend [Lastpass][lastpass-ref]. There are many sources on
  [white-paper](https://enterprise.lastpass.com/wp-content/uploads/LastPass-Technical-Whitepaper-3.pdf) if interested.
  It's free to use on all devices.
 
-# Use the Right K8s Context
+# Use the Right Kubernetes Context
 This is not an issue if you are riding the latest GitOps train and let CI/CD pipeline apply all the Kubernetes changes.
 But if your are old-school like me :D, you will probably use `kubectl apply` a lot.
 
