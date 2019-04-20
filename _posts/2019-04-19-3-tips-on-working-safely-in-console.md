@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "3 Tips on working securely and safely with Kubernetes and operations"
+title:  "3 tips on working securely and safely with Kubernetes and operations"
 date: 2019-04-19 21:10:23 +0200
 categories:
   - Tips
