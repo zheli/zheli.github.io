@@ -29,16 +29,16 @@ Social network with future timeline. Failed.
 
 #### <a href="http://offerqa.com" target="_blank">offerqa.com</a>
 
-Quora for Chinese expats.
+Quora for Chinese expats. Failed.
 
 #### <a href="http://gbgtechhunt.com" target="_blank">gbgtechhunt.com</a>
 
-Latest news for Gothenburg startup scene.
+Latest news for Gothenburg startup scene. Terminated.
 
 ## My Social Appearance
 
-Linkedin profile: <a title="View public profile" href="http://se.linkedin.com/in/zhese" name="webProfileURL"></a>[se.linkedin.com/in/zhese](http://se.linkedin.com/in/zhese)
+Linkedin profile: <a title="View public profile" href="www.linkedin.com/in/zhe" name="webProfileURL"></a>[www.linkedin.com/in/zhe](https://www.linkedin.com/in/zhe)
 
-Twitter: [twitter.com/linuxcity](http://twitter.com/linuxcity)
+Twitter: [twitter.com/linuxcity](https://twitter.com/linuxcity)
 
 Github: [github.com/zheli](https://github.com/zheli)
