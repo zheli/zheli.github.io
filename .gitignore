@@ -4,3 +4,4 @@ _site
 Session.vim
 *.swp
 .DS_Store
+.projectile
