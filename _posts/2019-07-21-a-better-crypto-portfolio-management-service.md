@@ -4,7 +4,10 @@ title:  "A better crypto portfolio service"
 date: 2019-07-21 21:36:45 +0200
 categories:
   - software
+  - cryptocurrency
+  - project
 ---
+![laptop]({{ "/assets/images/laptop-with-website.png" | absolute_url }})
 I started to make a crypto portfolio management application from scratch. Not
 because there are not enough services already, there are a lot of them actually.
 But none of them can make me 100% satisfied: there always seems to be something
@@ -38,19 +41,49 @@ fews days some other coins show up. Made it very difficult to track ROI.
 Since I usually start my trade from an exchange that accept fiat deposit, buy
 some BTC and move on to some other exchange, I really want to know which
 transaction is going to which exchange. You could do that manually of course.
-But wouldn't it be great if the system is smart enough to figure that out?
+But since I work at a transaction [analysis
+company](https://minnatechnologies.com), wouldn't it be great if the system is
+smart enough to figure that out? :)
+
 
 ## Other things I am not so happy with
 * Duplicated transactions. Perhaps can be fixed by simply introducing an
   external id for each transaction.
-* User experience. Service like CoinTracker requires user to manually click
+* User experience. Service like CoinTracking requires user to manually click
   refresh button every time I update transactions. This should happens
   automatically. Details, just details.
 * Would be great to have both web and mobile services. It's kinda of hard to add
   new transactions on a small device.
 
 ## Other Crypto Portfolio I have tried
-* CoinTracker (Great features, bad UX, expensive for none professional traders.
-  No monthly option)
-* Delta (Great UI, good features, expensive for the features it offers. No web service.)
-* Cyptocompare Portfolio (Limited features, cannot really track your ROI. Free)
+### CoinTracking
+![cointracking]({{ "/assets/images/cointracking.png" | absolute_url }})
+
+#### Pros
+* Great features
+
+#### Cons
+* bad UX
+* expensive for none professional traders
+*  No monthly option
+
+### Delta
+![delta]({{ "/assets/images/delta.jpg" | absolute_url }})
+
+#### Pros
+* Great UI
+* Good features
+
+#### Cons
+* Expensive for the features it offers.
+* No web service.
+
+### Cyptocompare Portfolio
+![cryptocompare]({{ "/assets/images/cryptocompare.png" | absolute_url }})
+#### Pros
+* Free
+* Service works in both mobile and desktop browser.
+
+#### Cons
+* Limited features
+* Cannot really track your ROI
