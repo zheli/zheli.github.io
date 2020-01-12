@@ -244,6 +244,7 @@ PLATFORMS
 DEPENDENCIES
   github-pages
   jekyll (>= 3.6.3)
+  jemoji
 
 BUNDLED WITH
    1.16.6
