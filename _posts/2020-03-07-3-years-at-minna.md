@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  3 Years At Minna Technologies
-date:   2020-03-06 00:00:03 +0100
+date:   2020-03-07 00:00:03 +0100
 ---
 
 March 7th, 2020 is my 3rd anniversary at Minna Technologies. It feels like I
