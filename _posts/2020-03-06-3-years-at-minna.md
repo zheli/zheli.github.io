@@ -26,7 +26,7 @@ could make money.
 So when I got home after the first meeting, I wasn't thinking
 about how big the company would be in five years, it's more like do I have to
 find another job in 6 months. But in the end I decided to trust my gut feeling
-and join Minna. It became one of the best decisions I've made in my life.
+and join Minna. And it became one of the best decisions I've made in my life.
 
 It will be interesting to see what Minna will archive in the next 3 years.
 
