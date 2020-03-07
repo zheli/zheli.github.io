@@ -15,7 +15,7 @@ one startup year is like three corporate years?
 
 Looking back I never thought we could become this big this quick. Imagine
 walking into an attic crowded with developers, having a discussion with some
-founder who just graduated from school and you have no idea how the application
+founder who just graduated from school and you have no idea how the service
 could make money.
 
 <figure>
