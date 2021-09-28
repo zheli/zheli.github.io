@@ -1,5 +1,5 @@
 ## Install/Update bundle
-Run `bundle install`
+Run `bundle install` or `bundle update` or `bundle update --bundler`
 
 ## Local draft mode
 Run `bundle exec jekyll server --draft` and edit your post in `_drafts` folder.
