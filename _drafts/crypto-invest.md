@@ -52,14 +52,30 @@ majority (>70%) of your portfolio consists of less risky cryptocurrencies.
 ### small groups
 You shouldn't just put all your eggs in one basket, but make sure that you don't
 have too many different kinds of cryptocurrencies either. You probably need to
-read up a lot when you just started and fewer places to check will make it less
-overwhelming.
+read up a lot when you just started and the last thing you want is to divide
+your attentions. Things are happening at much higher rate in crypto space.
 
 When you have a good understanding of blockchain technologies, you can gradually
 start adding more coins into your portfolio.
 
 ## how to buy cryptocurrency
-* exchange
+This is the question everyone asks when they started. How to buy cryptocurrency
+with their native currency(fiat)? In cryptocurrency world, this is called
+on-ramp.
+
+It has definitely become easier compares to the early days. In the beginning
+most people got their Bitcoin from local meetup, online forum, mostly for free.
+Some also got their crypto currency via mining. Nowadays there are thousands
+of on-ramp services with great user experience to choose from. Here are the
+suggestions I give to my friend:
+
+### exchange
+For most people, the easiest way is to buy your first cryptocurrency from
+exchange. Exchanges usually have an onboard process to guide new people
+through their first purchase. A few of them even have bonus for new users.
+
+You can usually pay with bank transfer or credit card.
+TODO: list a few exchange here
 * friends
 * other services
 
