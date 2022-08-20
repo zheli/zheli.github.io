@@ -1,0 +1,20 @@
+name: pull request on bundle update
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  bundle-update:
+    name: bundle update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: pull request on bundle update
+        uses: supermanner/pull-request-on-bundle-update@v1.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_user_name: zheli
+          git_email: linuxcity.jn@gmail.com
