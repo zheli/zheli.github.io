@@ -5,3 +5,6 @@ Session.vim
 *.swp
 .DS_Store
 .projectile
+
+# ruby packages
+vendor
