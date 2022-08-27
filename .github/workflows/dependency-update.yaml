@@ -2,6 +2,7 @@ name: pull request on bundle update
 on:
   schedule:
     - cron: '0 8 * * 1'
+  workflow_dispatch:
 
 jobs:
   bundle-update:
