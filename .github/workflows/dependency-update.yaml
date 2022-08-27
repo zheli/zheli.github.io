@@ -18,7 +18,6 @@ jobs:
         run: |
           # this is to fix GIT not liking owner of the checkout dir
           chown -R $(id -u):$(id -g) $PWD
-          git config --global --add safe.directory /github/workspace
 
       - name: pull request on bundle update
         uses: supermanner/pull-request-on-bundle-update@v1.0.1
