@@ -12,6 +12,12 @@ jobs:
         uses: actions/checkout@v1
         with:
           fetch-depth: 1
+
+      - name: Set ownership
+        run: |
+          # this is to fix GIT not liking owner of the checkout dir
+          chown -R $(id -u):$(id -g) $PWD
+
       - name: pull request on bundle update
         uses: supermanner/pull-request-on-bundle-update@v1.0.1
         with:
