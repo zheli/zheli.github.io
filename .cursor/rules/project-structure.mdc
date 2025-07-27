@@ -1,0 +1,49 @@
+# Jekyll Blog Project Structure
+
+This is a Jekyll-based blog called "Systems Thoughts" focused on software development, startup, and life thoughts.
+
+## Key Files and Directories
+
+### Configuration
+- [_config.yml](mdc:_config.yml) - Main Jekyll configuration with site settings, plugins, and build settings
+- [Gemfile](mdc:Gemfile) - Ruby dependencies for Jekyll and plugins
+- [index.html](mdc:index.html) - Main homepage template
+
+### Content Organization
+- [_posts/](mdc:_posts/) - Published blog posts (YYYY-MM-DD-title.md format)
+- [_drafts/](mdc:_drafts/) - Unpublished draft posts for local development
+- [about.md](mdc:about.md) - About page content
+
+### Layouts and Templates
+- [_layouts/](mdc:_layouts/) - Jekyll layout templates
+  - [default.html](mdc:_layouts/default.html) - Base layout template
+  - [post.html](mdc:_layouts/post.html) - Blog post layout
+  - [page.html](mdc:_layouts/page.html) - Static page layout
+- [_includes/](mdc:_includes/) - Reusable HTML components
+  - [head.html](mdc:_includes/head.html) - HTML head section
+  - [header.html](mdc:_includes/header.html) - Site header
+  - [footer.html](mdc:_includes/footer.html) - Site footer
+
+### Assets and Styling
+- [_sass/](mdc:_sass/) - SCSS stylesheets
+- [css/](mdc:css/) - Compiled CSS files
+- [assets/](mdc:assets/) - Static assets (images, JS, etc.)
+
+### Development and Deployment
+- [docker-compose.yaml](mdc:docker-compose.yaml) - Production Docker setup
+- [docker-compose.local.yaml](mdc:docker-compose.local.yaml) - Local development Docker setup
+- [Dockerfile](mdc:Dockerfile) - Docker container configuration
+- [CNAME](mdc:CNAME) - Custom domain configuration for GitHub Pages
+
+### Build Output
+- [_site/](mdc:_site/) - Generated static site (never commit this directory)
+
+## Development Workflow
+1. Create drafts in [_drafts/](mdc:_drafts/) folder
+2. Use `bundle exec jekyll serve --draft --livereload` for local development
+3. Move completed posts from _drafts to _posts with proper date prefix
+4. Commit and push to GitHub for automatic deployment
+description:
+globs:
+alwaysApply: false
+---

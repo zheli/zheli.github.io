@@ -10,7 +10,9 @@ github_username: zheli
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
 
+# Jekyll 4.x configuration
 plugins:
   - jekyll-archives
   - jekyll-feed
@@ -20,3 +22,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jemoji
+
+# Jekyll 4.x performance settings
+incremental: true
+future: false

@@ -1,0 +1,56 @@
+# Docker Configuration
+
+## Docker Setup
+- Production: [docker-compose.yaml](mdc:docker-compose.yaml)
+- Local development: [docker-compose.local.yaml](mdc:docker-compose.local.yaml)
+- Container definition: [Dockerfile](mdc:Dockerfile)
+
+## Local Development
+```bash
+# Start local development environment
+docker-compose -f docker-compose.local.yaml up
+
+# Stop local environment
+docker-compose -f docker-compose.local.yaml down
+```
+
+## Production Deployment
+```bash
+# Start production environment
+docker-compose up
+
+# Stop production environment
+docker-compose down
+
+# Rebuild containers
+docker-compose up --build
+```
+
+## Docker Best Practices
+- Use multi-stage builds for optimization
+- Include only necessary files in Docker context
+- Set appropriate environment variables
+- Use specific version tags for base images
+- Implement health checks for production containers
+
+## Volume Management
+- Mount source code for development
+- Persist build artifacts appropriately
+- Use named volumes for data persistence
+- Configure proper file permissions
+
+## Network Configuration
+- Use bridge networks for container communication
+- Expose only necessary ports
+- Configure proper host bindings
+- Implement security best practices
+
+## Troubleshooting
+- Check container logs: `docker-compose logs`
+- Access container shell: `docker-compose exec service_name bash`
+- Rebuild without cache: `docker-compose build --no-cache`
+- Clean up unused resources: `docker system prune`
+description:
+globs:
+alwaysApply: false
+---

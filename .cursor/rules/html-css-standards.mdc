@@ -1,0 +1,49 @@
+# HTML and CSS Standards
+
+## Layout Structure
+- Base layout: [_layouts/default.html](mdc:_layouts/default.html)
+- Post layout: [_layouts/post.html](mdc:_layouts/post.html)
+- Page layout: [_layouts/page.html](mdc:_layouts/page.html)
+
+## Template Components
+- Head section: [_includes/head.html](mdc:_includes/head.html)
+- Header navigation: [_includes/header.html](mdc:_includes/header.html)
+- Footer: [_includes/footer.html](mdc:_includes/footer.html)
+- Cookie consent: [_includes/cookie-consent.html](mdc:_includes/cookie-consent.html)
+
+## Styling Guidelines
+- Use SCSS in [_sass/](mdc:_sass/) directory
+- Compiled CSS goes to [css/](mdc:css/) directory
+- Follow BEM methodology for CSS class naming
+- Use semantic HTML elements
+- Ensure responsive design for mobile devices
+
+## Jekyll Template Syntax
+- Use Liquid templating language
+- Variables: `{{ site.title }}`
+- Conditionals: `{% if condition %}...{% endif %}`
+- Loops: `{% for item in collection %}...{% endfor %}`
+- Includes: `{% include filename.html %}`
+
+## Asset Management
+- Store static assets in [assets/](mdc:assets/) directory
+- Use relative paths in templates
+- Optimize images and other media files
+- Include proper alt text for accessibility
+
+## SEO and Meta Tags
+- Use jekyll-seo-tag plugin for automatic meta tags
+- Include proper title, description, and Open Graph tags
+- Add structured data where appropriate
+- Ensure proper heading hierarchy (H1, H2, H3)
+
+## Performance Considerations
+- Minimize HTTP requests
+- Optimize images and assets
+- Use efficient CSS selectors
+- Consider lazy loading for images
+- Implement proper caching headers
+description:
+globs:
+alwaysApply: false
+---

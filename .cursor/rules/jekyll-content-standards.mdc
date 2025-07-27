@@ -1,0 +1,45 @@
+# Jekyll Content Standards
+
+## Blog Post Format
+- Use YAML front matter for all posts with required fields:
+  ```yaml
+  ---
+  layout: post
+  title: "Your Post Title"
+  date: YYYY-MM-DD HH:MM:SS
+  categories: [category1, category2]
+  tags: [tag1, tag2]
+  ---
+  ```
+
+## File Naming Conventions
+- Published posts: `YYYY-MM-DD-title-with-hyphens.md` in [_posts/](mdc:_posts/)
+- Draft posts: `title-with-hyphens.md` in [_drafts/](mdc:_drafts/)
+- Use lowercase with hyphens, no spaces or special characters
+
+## Content Guidelines
+- Write in Markdown format using kramdown parser
+- Use descriptive titles that reflect the content
+- Include relevant categories and tags for organization
+- Keep posts focused and well-structured
+- Use proper heading hierarchy (H1 for title, H2 for sections, etc.)
+
+## Draft Workflow
+- Create new posts in [_drafts/](mdc:_drafts/) folder
+- Test locally with `bundle exec jekyll serve --draft --livereload`
+- When ready to publish, move to [_posts/](mdc:_posts/) with proper date prefix
+- Commit and push to trigger GitHub Pages deployment
+
+## Code Blocks
+- Use triple backticks with language specification for syntax highlighting
+- Example: ```python for Python code blocks
+- Include descriptive comments in code examples
+
+## Images and Assets
+- Store images in [assets/](mdc:assets/) directory
+- Use relative paths in markdown: `![alt text](../assets/image.jpg)`
+- Optimize images for web (compress, appropriate formats)
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,50 @@
+# Development Workflow
+
+## Local Development Setup
+1. Install dependencies: `bundle install`
+2. Start local server with drafts: `bundle exec jekyll serve --draft --livereload`
+3. Access site at `http://localhost:4000`
+
+## Docker Development
+- Use local Docker setup: `docker-compose -f docker-compose.local.yaml up`
+- Production Docker: `docker-compose up`
+
+## Content Management
+- **Create new post**: Add markdown file to [_drafts/](mdc:_drafts/) folder
+- **Edit existing post**: Modify file in [_posts/](mdc:_posts/) or [_drafts/](mdc:_drafts/)
+- **Publish draft**: Move from [_drafts/](mdc:_drafts/) to [_posts/](mdc:_posts/) with date prefix
+- **Update dependencies**: `bundle update` or `bundle update --bundler`
+
+## Deployment
+- **GitHub Pages**: Push to main branch triggers automatic deployment
+- **Custom domain**: Configured via [CNAME](mdc:CNAME) file
+- **Never commit**: [_site/](mdc:_site/) directory (build output)
+
+## Common Commands
+```bash
+# Install/update dependencies
+bundle install
+bundle update
+
+# Local development
+bundle exec jekyll serve --draft --livereload
+
+# Build for production
+bundle exec jekyll build
+
+# Docker development
+docker-compose -f docker-compose.local.yaml up
+
+# Docker production
+docker-compose up
+```
+
+## Troubleshooting
+- Clear build cache: Delete [_site/](mdc:_site/) directory
+- Update Jekyll: `bundle update jekyll`
+- Check configuration: [_config.yml](mdc:_config.yml) syntax
+- Verify plugins: Check [Gemfile](mdc:Gemfile) dependencies
+description:
+globs:
+alwaysApply: false
+---
