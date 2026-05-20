@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swedish Company Car Financial Calculator</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --good: #047857;
+      --bad: #b91c1c;
+      --warn: #92400e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 28px 18px 56px; }
+    header { margin-bottom: 22px; }
+    h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: -0.03em; }
+    h2 { margin: 0 0 14px; font-size: 19px; }
+    h3 { margin: 0 0 8px; font-size: 15px; color: var(--muted); }
+    p { margin: 0 0 10px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+    .input-row { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 12px; margin: 12px 0; }
+    label { font-weight: 600; font-size: 14px; }
+    .hint { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    input[type="number"] {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 15px;
+    }
+    input[type="range"] { width: 100%; }
+    .slider-row { margin: 16px 0 6px; }
+    .slider-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 6px; }
+    .value-pill { background: #eef2ff; color: #1e40af; padding: 4px 9px; border-radius: 999px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+    .metric { padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: #fafafa; }
+    .metric .label { color: var(--muted); font-size: 13px; margin-bottom: 4px; }
+    .metric .value { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .good { color: var(--good); }
+    .bad { color: var(--bad); }
+    .warn { color: var(--warn); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: var(--muted); font-weight: 700; }
+    .section { margin-top: 18px; }
+    .summary { font-size: 15px; }
+    .small { font-size: 12px; color: var(--muted); }
+    .bar-wrap { display: grid; gap: 10px; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    .bar-bg { height: 12px; background: #eef2f7; border-radius: 999px; overflow: hidden; }
+    .bar { height: 100%; background: var(--accent); border-radius: 999px; transition: width .15s ease; }
+    .footer-note { margin-top: 18px; font-size: 12px; color: var(--muted); }
+    @media (max-width: 900px) {
+      .grid, .three { grid-template-columns: 1fr; }
+      .input-row { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      .card { box-shadow: none; break-inside: avoid; }
+      input[type="range"] { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Swedish Company Car Scenario Calculator</h1>
+      <p>Compare private car cost vs company lease car using salary reduction and/or nettolöneavdrag.</p>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Editable assumptions</h2>
+        <div class="input-row"><label>Gross salary before change <span class="hint">Current base salary</span></label><input id="salary" type="number" value="40000" step="100" /></div>
+        <div class="input-row"><label>Salary reduction <span class="hint">Example: reduce 40k → 37k means 3,000</span></label><input id="salaryReduction" type="number" value="0" step="100" /></div>
+        <div class="input-row"><label>Monthly lease ex VAT <span class="hint">Tesla quoted lease before VAT</span></label><input id="leaseExVat" type="number" value="4857" step="50" /></div>
+        <div class="input-row"><label>Car förmånsvärde <span class="hint">Taxable car benefit before nettolöneavdrag</span></label><input id="benefit" type="number" value="4748" step="50" /></div>
+        <div class="input-row"><label>Nettolöneavdrag <span class="hint">Post-tax salary deduction paid back to company</span></label><input id="netDeduction" type="number" value="3000" step="100" /></div>
+        <div class="input-row"><label>Current old car monthly cost <span class="hint">Private after-tax cost removed if sold</span></label><input id="oldCarCost" type="number" value="3000" step="100" /></div>
+        <div class="input-row"><label>Insurance paid by company <span class="hint">Estimate for company car</span></label><input id="insurance" type="number" value="1300" step="100" /></div>
+        <div class="input-row"><label>Maintenance/service/tires <span class="hint">Monthly average paid by company</span></label><input id="maintenance" type="number" value="500" step="100" /></div>
+        <div class="input-row"><label>Electricity/fuel saving personally <span class="hint">Compared with old car</span></label><input id="fuelSaving" type="number" value="700" step="100" /></div>
+        <div class="input-row"><label>Marginal personal tax rate <span class="hint">Approx. municipal tax rate</span></label><input id="personalTax" type="number" value="33" step="0.1" /></div>
+        <div class="input-row"><label>Employer social fee rate <span class="hint">Normal arbetsgivaravgift</span></label><input id="employerFee" type="number" value="31.42" step="0.01" /></div>
+        <div class="input-row"><label>Corporate tax rate <span class="hint">Bolagsskatt</span></label><input id="corpTax" type="number" value="20.6" step="0.1" /></div>
+      </section>
+
+      <section class="card">
+        <h2>Scenario sliders</h2>
+        <div class="slider-row">
+          <div class="slider-head"><label for="netDeductionSlider">Nettolöneavdrag</label><span class="value-pill" id="netDeductionPill"></span></div>
+          <input id="netDeductionSlider" type="range" min="0" max="8000" value="3000" step="100" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-head"><label for="salaryReductionSlider">Salary reduction</label><span class="value-pill" id="salaryReductionPill"></span></div>
+          <input id="salaryReductionSlider" type="range" min="0" max="10000" value="0" step="100" />
+        </div>
+
+        <div class="section three">
+          <div class="metric"><div class="label">Company net monthly cost</div><div class="value bad" id="companyCost"></div></div>
+          <div class="metric"><div class="label">Personal monthly cash impact</div><div class="value" id="personalImpact"></div></div>
+          <div class="metric"><div class="label">Remaining taxable benefit</div><div class="value warn" id="taxableBenefit"></div></div>
+        </div>
+
+        <div class="section card" style="box-shadow:none;padding:14px;background:#fbfdff;">
+          <h3>Plain-English result</h3>
+          <p class="summary" id="plainResult"></p>
+        </div>
+
+        <div class="section bar-wrap">
+          <div>
+            <div class="bar-label"><span>Company burden after deductions</span><span id="companyBarText"></span></div>
+            <div class="bar-bg"><div class="bar" id="companyBar"></div></div>
+          </div>
+          <div>
+            <div class="bar-label"><span>Taxable benefit remaining</span><span id="benefitBarText"></span></div>
+            <div class="bar-bg"><div class="bar" id="benefitBar"></div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card section">
+      <h2>Monthly breakdown</h2>
+      <table>
+        <thead><tr><th>Line item</th><th>Company cash / cost</th><th>Personal cash / tax</th></tr></thead>
+        <tbody id="breakdown"></tbody>
+      </table>
+    </section>
+
+    <section class="card section">
+      <h2>Comparison presets</h2>
+      <table>
+        <thead><tr><th>Scenario</th><th>Company net cost / month</th><th>Personal cash impact / month</th><th>Remaining taxable benefit</th></tr></thead>
+        <tbody id="comparison"></tbody>
+      </table>
+      <p class="footer-note">Personal impact is compared with keeping the old Golf and paying the old monthly cost privately. Positive means better personal cashflow; negative means worse personal cashflow.</p>
+    </section>
+
+    <section class="card section">
+      <h2>Tax/accounting notes</h2>
+      <ul>
+        <li>The company normally pays lease, insurance, maintenance, service, repairs, tire changes, and inspections for a company lease car.</li>
+        <li>Insurance and normal maintenance are generally included in the car benefit and are not taxed separately.</li>
+        <li>Nettolöneavdrag reduces the taxable car benefit krona-for-krona, up to the förmånsvärde.</li>
+        <li>When nettolöneavdrag fully offsets the förmånsvärde, the extra employer social fees on the car benefit become approximately zero.</li>
+        <li>Leasing VAT rule assumed here: 50% of VAT on lease is recoverable. Insurance is normally VAT-free.</li>
+        <li>This is a planning calculator, not final payroll/accounting advice. Ask your accountant to configure the payroll treatment correctly.</li>
+      </ul>
+    </section>
+  </div>
+
+<script>
+const ids = ["salary","salaryReduction","leaseExVat","benefit","netDeduction","oldCarCost","insurance","maintenance","fuelSaving","personalTax","employerFee","corpTax"];
+const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+const fmt = n => new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 0 }).format(Math.round(n)) + ' kr';
+const pct = n => Number(n) / 100;
+function values(override = {}) {
+  const v = Object.fromEntries(ids.map(id => [id, parseFloat(el[id].value || 0)]));
+  return { ...v, ...override };
+}
+function calc(v) {
+  const vatOnLease = v.leaseExVat * 0.25;
+  const recoverableVat = vatOnLease * 0.5;
+  const leaseCashInclVat = v.leaseExVat + vatOnLease;
+  const effectiveLeaseCost = leaseCashInclVat - recoverableVat;
+  const grossCarCost = effectiveLeaseCost + v.insurance + v.maintenance;
+  const taxableBenefit = Math.max(0, v.benefit - v.netDeduction);
+  const employerFeeOnBenefit = taxableBenefit * pct(v.employerFee);
+  const salarySavingForCompany = v.salaryReduction * (1 + pct(v.employerFee));
+  const companyBeforeCorpTax = grossCarCost + employerFeeOnBenefit - v.netDeduction - salarySavingForCompany;
+  const corpTaxShield = Math.max(0, companyBeforeCorpTax) * pct(v.corpTax);
+  const companyAfterCorpTax = companyBeforeCorpTax - corpTaxShield;
+  const personalTaxOnBenefit = taxableBenefit * pct(v.personalTax);
+  const netSalaryLossFromReduction = v.salaryReduction * (1 - pct(v.personalTax));
+  const personalImpact = v.oldCarCost + v.fuelSaving - v.netDeduction - personalTaxOnBenefit - netSalaryLossFromReduction;
+  return { vatOnLease, recoverableVat, leaseCashInclVat, effectiveLeaseCost, grossCarCost, taxableBenefit, employerFeeOnBenefit, salarySavingForCompany, companyBeforeCorpTax, corpTaxShield, companyAfterCorpTax, personalTaxOnBenefit, netSalaryLossFromReduction, personalImpact };
+}
+function setClass(node, val, positiveGood = true) {
+  node.className = 'value ' + ((val >= 0) === positiveGood ? 'good' : 'bad');
+}
+function row(name, company, personal) {
+  return `<tr><td>${name}</td><td>${company}</td><td>${personal}</td></tr>`;
+}
+function update() {
+  document.getElementById('netDeductionSlider').value = el.netDeduction.value;
+  document.getElementById('salaryReductionSlider').value = el.salaryReduction.value;
+  document.getElementById('netDeductionPill').textContent = fmt(+el.netDeduction.value || 0);
+  document.getElementById('salaryReductionPill').textContent = fmt(+el.salaryReduction.value || 0);
+  const v = values();
+  const r = calc(v);
+  document.getElementById('companyCost').textContent = fmt(r.companyAfterCorpTax);
+  document.getElementById('personalImpact').textContent = (r.personalImpact >= 0 ? '+' : '') + fmt(r.personalImpact);
+  setClass(document.getElementById('personalImpact'), r.personalImpact, true);
+  document.getElementById('taxableBenefit').textContent = fmt(r.taxableBenefit);
+  document.getElementById('plainResult').textContent = `With ${fmt(v.netDeduction)} nettolöneavdrag and ${fmt(v.salaryReduction)} salary reduction, the company carries about ${fmt(r.companyAfterCorpTax)} per month after estimated corporate tax effect. Your personal cashflow changes by about ${(r.personalImpact >= 0 ? '+' : '') + fmt(r.personalImpact)} per month compared with keeping the old car.`;
+  const companyPct = Math.min(100, Math.max(0, r.companyAfterCorpTax / Math.max(1, r.grossCarCost + r.employerFeeOnBenefit) * 100));
+  const benefitPct = Math.min(100, Math.max(0, r.taxableBenefit / Math.max(1, v.benefit) * 100));
+  document.getElementById('companyBar').style.width = companyPct + '%';
+  document.getElementById('benefitBar').style.width = benefitPct + '%';
+  document.getElementById('companyBarText').textContent = Math.round(companyPct) + '%';
+  document.getElementById('benefitBarText').textContent = Math.round(benefitPct) + '%';
+  document.getElementById('breakdown').innerHTML = [
+    row('Lease incl. non-recoverable VAT', '-' + fmt(r.effectiveLeaseCost), '—'),
+    row('Insurance paid by company', '-' + fmt(v.insurance), 'No separate benefit tax normally'),
+    row('Maintenance/service/tires paid by company', '-' + fmt(v.maintenance), 'No separate benefit tax normally'),
+    row('Nettolöneavdrag paid back to company', '+' + fmt(v.netDeduction), '-' + fmt(v.netDeduction)),
+    row('Employer fee on remaining car benefit', '-' + fmt(r.employerFeeOnBenefit), '—'),
+    row('Salary reduction company saving', '+' + fmt(r.salarySavingForCompany), '-' + fmt(r.netSalaryLossFromReduction) + ' net salary'),
+    row('Tax on remaining car benefit', '—', '-' + fmt(r.personalTaxOnBenefit)),
+    row('Old private car cost removed', '—', '+' + fmt(v.oldCarCost)),
+    row('Estimated personal fuel/electricity saving', '—', '+' + fmt(v.fuelSaving)),
+    row('<strong>Total monthly impact</strong>', '<strong>-' + fmt(r.companyAfterCorpTax) + '</strong>', '<strong>' + (r.personalImpact >= 0 ? '+' : '') + fmt(r.personalImpact) + '</strong>')
+  ].join('');
+  const scenarios = [
+    ['No nettolöneavdrag, no salary reduction', { netDeduction: 0, salaryReduction: 0 }],
+    ['3,000 nettolöneavdrag', { netDeduction: 3000, salaryReduction: 0 }],
+    ['Full nettolöneavdrag', { netDeduction: v.benefit, salaryReduction: 0 }],
+    ['3,000 salary reduction only', { netDeduction: 0, salaryReduction: 3000 }],
+    ['3,000 nettolöneavdrag + 3,000 salary reduction', { netDeduction: 3000, salaryReduction: 3000 }]
+  ];
+  document.getElementById('comparison').innerHTML = scenarios.map(([name, o]) => {
+    const rr = calc(values(o));
+    return `<tr><td>${name}</td><td>${fmt(rr.companyAfterCorpTax)}</td><td>${rr.personalImpact >= 0 ? '+' : ''}${fmt(rr.personalImpact)}</td><td>${fmt(rr.taxableBenefit)}</td></tr>`;
+  }).join('');
+}
+ids.forEach(id => el[id].addEventListener('input', update));
+document.getElementById('netDeductionSlider').addEventListener('input', e => { el.netDeduction.value = e.target.value; update(); });
+document.getElementById('salaryReductionSlider').addEventListener('input', e => { el.salaryReduction.value = e.target.value; update(); });
+update();
+</script>
+</body>
+</html>
