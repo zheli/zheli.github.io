@@ -88,18 +88,18 @@
     <div class="grid">
       <section class="card">
         <h2>Editable assumptions</h2>
-        <div class="input-row"><label>Gross salary before change <span class="hint">Current base salary</span></label><input id="salary" type="number" value="40000" step="100" /></div>
-        <div class="input-row"><label>Salary reduction <span class="hint">Example: reduce 40k → 37k means 3,000</span></label><input id="salaryReduction" type="number" value="0" step="100" /></div>
-        <div class="input-row"><label>Monthly lease ex VAT <span class="hint">Tesla quoted lease before VAT</span></label><input id="leaseExVat" type="number" value="4857" step="50" /></div>
-        <div class="input-row"><label>Car förmånsvärde <span class="hint">Taxable car benefit before nettolöneavdrag</span></label><input id="benefit" type="number" value="4748" step="50" /></div>
+        <div class="input-row"><label>Gross salary before change (bruttolön) <span class="hint">Current base salary</span></label><input id="salary" type="number" value="40000" step="100" /></div>
+        <div class="input-row"><label>Salary reduction (lönereduktion) <span class="hint">Example: reduce 40k → 37k means 3,000</span></label><input id="salaryReduction" type="number" value="0" step="100" /></div>
+        <div class="input-row"><label>Monthly lease ex VAT (leasing ex moms) <span class="hint">Tesla quoted lease before VAT</span></label><input id="leaseExVat" type="number" value="4857" step="50" /></div>
+        <div class="input-row"><label>Car förmånsvärde (bilförmån) <span class="hint">Taxable car benefit before nettolöneavdrag</span></label><input id="benefit" type="number" value="4748" step="50" /></div>
         <div class="input-row"><label>Nettolöneavdrag <span class="hint">Post-tax salary deduction paid back to company</span></label><input id="netDeduction" type="number" value="3000" step="100" /></div>
-        <div class="input-row"><label>Current old car monthly cost <span class="hint">Private after-tax cost removed if sold</span></label><input id="oldCarCost" type="number" value="3000" step="100" /></div>
-        <div class="input-row"><label>Insurance paid by company <span class="hint">Estimate for company car</span></label><input id="insurance" type="number" value="1300" step="100" /></div>
-        <div class="input-row"><label>Maintenance/service/tires <span class="hint">Monthly average paid by company</span></label><input id="maintenance" type="number" value="500" step="100" /></div>
-        <div class="input-row"><label>Electricity/fuel saving personally <span class="hint">Compared with old car</span></label><input id="fuelSaving" type="number" value="700" step="100" /></div>
-        <div class="input-row"><label>Marginal personal tax rate <span class="hint">Approx. municipal tax rate</span></label><input id="personalTax" type="number" value="33" step="0.1" /></div>
-        <div class="input-row"><label>Employer social fee rate <span class="hint">Normal arbetsgivaravgift</span></label><input id="employerFee" type="number" value="31.42" step="0.01" /></div>
-        <div class="input-row"><label>Corporate tax rate <span class="hint">Bolagsskatt</span></label><input id="corpTax" type="number" value="20.6" step="0.1" /></div>
+        <div class="input-row"><label>Current old car monthly cost (privat bilkostnad) <span class="hint">Private after-tax cost removed if sold</span></label><input id="oldCarCost" type="number" value="3000" step="100" /></div>
+        <div class="input-row"><label>Insurance paid by company (försäkring) <span class="hint">Estimate for company car</span></label><input id="insurance" type="number" value="1300" step="100" /></div>
+        <div class="input-row"><label>Maintenance/service/tires (underhåll/service/däck) <span class="hint">Monthly average paid by company</span></label><input id="maintenance" type="number" value="500" step="100" /></div>
+        <div class="input-row"><label>Electricity/fuel saving personally (el-/bränslebesparing) <span class="hint">Compared with old car</span></label><input id="fuelSaving" type="number" value="700" step="100" /></div>
+        <div class="input-row"><label>Marginal personal tax rate (marginalskatt) <span class="hint">Approx. municipal tax rate</span></label><input id="personalTax" type="number" value="33" step="0.1" /></div>
+        <div class="input-row"><label>Employer social fee rate (arbetsgivaravgift) <span class="hint">Normal arbetsgivaravgift</span></label><input id="employerFee" type="number" value="31.42" step="0.01" /></div>
+        <div class="input-row"><label>Corporate tax rate (bolagsskatt) <span class="hint">Bolagsskatt</span></label><input id="corpTax" type="number" value="20.6" step="0.1" /></div>
       </section>
 
       <section class="card">
@@ -109,14 +109,14 @@
           <input id="netDeductionSlider" type="range" min="0" max="8000" value="3000" step="100" />
         </div>
         <div class="slider-row">
-          <div class="slider-head"><label for="salaryReductionSlider">Salary reduction</label><span class="value-pill" id="salaryReductionPill"></span></div>
+          <div class="slider-head"><label for="salaryReductionSlider">Salary reduction (lönereduktion)</label><span class="value-pill" id="salaryReductionPill"></span></div>
           <input id="salaryReductionSlider" type="range" min="0" max="10000" value="0" step="100" />
         </div>
 
         <div class="section three">
-          <div class="metric"><div class="label">Company net monthly cost</div><div class="value bad" id="companyCost"></div></div>
-          <div class="metric"><div class="label">Personal monthly cash impact</div><div class="value" id="personalImpact"></div></div>
-          <div class="metric"><div class="label">Remaining taxable benefit</div><div class="value warn" id="taxableBenefit"></div></div>
+          <div class="metric"><div class="label">Company net monthly cost (nettokostnad för bolaget)</div><div class="value bad" id="companyCost"></div></div>
+          <div class="metric"><div class="label">Personal monthly cash impact (personlig kassaflödespåverkan)</div><div class="value" id="personalImpact"></div></div>
+          <div class="metric"><div class="label">Remaining taxable benefit (kvarvarande skattepliktig förmån)</div><div class="value warn" id="taxableBenefit"></div></div>
         </div>
 
         <div class="section card" style="box-shadow:none;padding:14px;background:#fbfdff;">
@@ -218,15 +218,15 @@ function update() {
   document.getElementById('companyBarText').textContent = Math.round(companyPct) + '%';
   document.getElementById('benefitBarText').textContent = Math.round(benefitPct) + '%';
   document.getElementById('breakdown').innerHTML = [
-    row('Lease incl. non-recoverable VAT', '-' + fmt(r.effectiveLeaseCost), '—'),
-    row('Insurance paid by company', '-' + fmt(v.insurance), 'No separate benefit tax normally'),
-    row('Maintenance/service/tires paid by company', '-' + fmt(v.maintenance), 'No separate benefit tax normally'),
-    row('Nettolöneavdrag paid back to company', '+' + fmt(v.netDeduction), '-' + fmt(v.netDeduction)),
-    row('Employer fee on remaining car benefit', '-' + fmt(r.employerFeeOnBenefit), '—'),
-    row('Salary reduction company saving', '+' + fmt(r.salarySavingForCompany), '-' + fmt(r.netSalaryLossFromReduction) + ' net salary'),
-    row('Tax on remaining car benefit', '—', '-' + fmt(r.personalTaxOnBenefit)),
-    row('Old private car cost removed', '—', '+' + fmt(v.oldCarCost)),
-    row('Estimated personal fuel/electricity saving', '—', '+' + fmt(v.fuelSaving)),
+    row('Lease incl. non-recoverable VAT (leasing inkl. ej avdragsgill moms)', '-' + fmt(r.effectiveLeaseCost), '—'),
+    row('Insurance paid by company (försäkring)', '-' + fmt(v.insurance), 'No separate benefit tax normally'),
+    row('Maintenance/service/tires paid by company (underhåll/service/däck)', '-' + fmt(v.maintenance), 'No separate benefit tax normally'),
+    row('Nettolöneavdrag paid back to company (återbetalning)', '+' + fmt(v.netDeduction), '-' + fmt(v.netDeduction)),
+    row('Employer fee on remaining car benefit (arbetsgivaravgift på kvarvarande förmån)', '-' + fmt(r.employerFeeOnBenefit), '—'),
+    row('Salary reduction company saving (lönereduktion, bolagets besparing)', '+' + fmt(r.salarySavingForCompany), '-' + fmt(r.netSalaryLossFromReduction) + ' net salary'),
+    row('Tax on remaining car benefit (skatt på kvarvarande förmån)', '—', '-' + fmt(r.personalTaxOnBenefit)),
+    row('Old private car cost removed (privat bilkostnad borttagen)', '—', '+' + fmt(v.oldCarCost)),
+    row('Estimated personal fuel/electricity saving (el-/bränslebesparing)', '—', '+' + fmt(v.fuelSaving)),
     row('<strong>Total monthly impact</strong>', '<strong>-' + fmt(r.companyAfterCorpTax) + '</strong>', '<strong>' + (r.personalImpact >= 0 ? '+' : '') + fmt(r.personalImpact) + '</strong>')
   ].join('');
   const scenarios = [
