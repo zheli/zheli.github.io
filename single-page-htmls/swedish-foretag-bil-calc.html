@@ -189,7 +189,7 @@ const fmt = n => new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 0 }).fo
 const pct = n => Number(n) / 100;
 function setupCarProfiles() {
   const select = document.getElementById('carProfile');
-  select.innerHTML = carProfiles.map((profile, index) => `<option value="${index}">${profile.name}</option>`).join('');
+  select.innerHTML = '<option value="custom">Custom car</option>' + carProfiles.map((profile, index) => `<option value="${index}">${profile.name}</option>`).join('');
   select.value = '0';
 }
 function selectedCarProfileName() {
@@ -275,7 +275,10 @@ function update() {
   }).join('');
 }
 setupCarProfiles();
-ids.forEach(id => el[id].addEventListener('input', update));
+ids.forEach(id => el[id].addEventListener('input', () => {
+  if (id === 'leaseExVat' || id === 'benefit') document.getElementById('carProfile').value = 'custom';
+  update();
+}));
 document.getElementById('carProfile').addEventListener('change', e => {
   const profile = carProfiles[Number(e.target.value)];
   if (!profile) return;
