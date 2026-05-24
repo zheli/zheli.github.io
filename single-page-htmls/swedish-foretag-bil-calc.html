@@ -97,9 +97,8 @@
         <div class="input-row"><label>Car förmånsvärde (bilförmån) <span class="hint">Taxable car benefit before nettolöneavdrag</span></label><input id="benefit" type="number" value="4748" step="50" /></div>
         <div class="input-row"><label>Nettolöneavdrag <span class="hint">Post-tax salary deduction paid back to company</span></label><input id="netDeduction" type="number" value="3000" step="100" /></div>
         <div class="input-row"><label>Current old car monthly cost (privat bilkostnad) <span class="hint">Private after-tax cost removed if sold</span></label><input id="oldCarCost" type="number" value="3000" step="100" /></div>
-        <div class="input-row"><label>Insurance paid by company (försäkring) <span class="hint">Estimate for company car</span></label><input id="insurance" type="number" value="1300" step="100" /></div>
+        <div class="input-row"><label>Insurance paid by company (försäkring) <span class="hint">Estimate for company car</span></label><input id="insurance" type="number" value="500" step="100" /></div>
         <div class="input-row"><label>Maintenance/service/tires (underhåll/service/däck) <span class="hint">Monthly average paid by company</span></label><input id="maintenance" type="number" value="500" step="100" /></div>
-        <div class="input-row"><label>Electricity/fuel saving personally (el-/bränslebesparing) <span class="hint">Compared with old car</span></label><input id="fuelSaving" type="number" value="700" step="100" /></div>
         <div class="input-row"><label>Marginal personal tax rate (marginalskatt) <span class="hint">Approx. municipal tax rate</span></label><input id="personalTax" type="number" value="33" step="0.1" /></div>
         <div class="input-row"><label>Employer social fee rate (arbetsgivaravgift) <span class="hint">Normal arbetsgivaravgift</span></label><input id="employerFee" type="number" value="31.42" step="0.01" /></div>
         <div class="input-row"><label>Corporate tax rate (bolagsskatt) <span class="hint">Bolagsskatt</span></label><input id="corpTax" type="number" value="20.6" step="0.1" /></div>
@@ -177,15 +176,15 @@
   </div>
 
 <script>
-const ids = ["salary","salaryReduction","leaseExVat","benefit","netDeduction","oldCarCost","insurance","maintenance","fuelSaving","personalTax","employerFee","corpTax"];
+const ids = ["salary","salaryReduction","leaseExVat","benefit","netDeduction","oldCarCost","insurance","maintenance","personalTax","employerFee","corpTax"];
 const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
 const carProfiles = [
-  { name: 'Tesla Model 3 RWD (Black)', leaseExVat: 4857, benefit: 4616 },
-  { name: 'Tesla Model 3 Long Range RWD (Black)', leaseExVat: 5797, benefit: 5208 },
-  { name: 'Tesla Model 3 RWD (White)', leaseExVat: 4700, benefit: 4419 },
-  { name: 'Tesla Model 3 Long Range RWD (White)', leaseExVat: 5640, benefit: 5011 },
-  { name: 'Tesla Model Y RWD (White)', leaseExVat: 4857, benefit: 4945 },
-  { name: 'Tesla Model Y Long Range RWD (White)', leaseExVat: 6507, benefit: 5491 }
+  { name: 'Tesla Model 3 RWD (Black)', leaseExVat: 4857, benefit: 4616, insurance: 500 },
+  { name: 'Tesla Model 3 Long Range RWD (Black)', leaseExVat: 5797, benefit: 5208, insurance: 500 },
+  { name: 'Tesla Model 3 RWD (White)', leaseExVat: 4700, benefit: 4419, insurance: 500 },
+  { name: 'Tesla Model 3 Long Range RWD (White)', leaseExVat: 5640, benefit: 5011, insurance: 500 },
+  { name: 'Tesla Model Y RWD (White)', leaseExVat: 4857, benefit: 4945, insurance: 500 },
+  { name: 'Tesla Model Y Long Range RWD (White)', leaseExVat: 6507, benefit: 5491, insurance: 500 }
 ];
 const fmt = n => new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 0 }).format(Math.round(n)) + ' kr';
 const pct = n => Number(n) / 100;
@@ -220,7 +219,7 @@ function calc(v) {
   const netSalaryBefore = v.salary * (1 - pct(v.personalTax));
   const netSalaryAfter = (v.salary - v.salaryReduction) * (1 - pct(v.personalTax)) - v.netDeduction - personalTaxOnBenefit;
   const netSalaryChange = netSalaryAfter - netSalaryBefore;
-  const personalImpact = v.oldCarCost + v.fuelSaving - v.netDeduction - personalTaxOnBenefit - netSalaryLossFromReduction;
+  const personalImpact = v.oldCarCost - v.netDeduction - personalTaxOnBenefit - netSalaryLossFromReduction;
   return { vatOnLease, recoverableVat, leaseCashInclVat, effectiveLeaseCost, grossCarCost, taxableBenefit, employerFeeOnBenefit, salarySavingForCompany, companyBeforeCorpTax, corpTaxShield, companyAfterCorpTax, companyAnnualCost, personalTaxOnBenefit, netSalaryLossFromReduction, netSalaryBefore, netSalaryAfter, netSalaryChange, personalImpact };
 }
 function setClass(node, val, positiveGood = true) {
@@ -261,7 +260,6 @@ function update() {
     row('Salary reduction company saving (lönereduktion, bolagets besparing)', '+' + fmt(r.salarySavingForCompany), '-' + fmt(r.netSalaryLossFromReduction) + ' net salary'),
     row('Tax on remaining car benefit (skatt på kvarvarande förmån)', '—', '-' + fmt(r.personalTaxOnBenefit)),
     row('Old private car cost removed (privat bilkostnad borttagen)', '—', '+' + fmt(v.oldCarCost)),
-    row('Estimated personal fuel/electricity saving (el-/bränslebesparing)', '—', '+' + fmt(v.fuelSaving)),
     row('<strong>Total monthly impact</strong>', '<strong>-' + fmt(r.companyAfterCorpTax) + '</strong>', '<strong>' + (r.personalImpact >= 0 ? '+' : '') + fmt(r.personalImpact) + '</strong>')
   ].join('');
   const scenarios = [
@@ -278,7 +276,7 @@ function update() {
 }
 setupCarProfiles();
 ids.forEach(id => el[id].addEventListener('input', () => {
-  if (id === 'leaseExVat' || id === 'benefit') document.getElementById('carProfile').value = 'custom';
+  if (id === 'leaseExVat' || id === 'benefit' || id === 'insurance') document.getElementById('carProfile').value = 'custom';
   update();
 }));
 document.getElementById('carProfile').addEventListener('change', e => {
@@ -286,6 +284,7 @@ document.getElementById('carProfile').addEventListener('change', e => {
   if (!profile) return;
   el.leaseExVat.value = profile.leaseExVat;
   el.benefit.value = profile.benefit;
+  el.insurance.value = profile.insurance;
   update();
 });
 document.getElementById('netDeductionSlider').addEventListener('input', e => { el.netDeduction.value = e.target.value; update(); });
