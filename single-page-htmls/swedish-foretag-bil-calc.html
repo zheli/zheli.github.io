@@ -180,10 +180,12 @@
 const ids = ["salary","salaryReduction","leaseExVat","benefit","netDeduction","oldCarCost","insurance","maintenance","fuelSaving","personalTax","employerFee","corpTax"];
 const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
 const carProfiles = [
-  { name: 'Tesla Model 3 RWD', leaseExVat: 4857, benefit: 4748 },
-  { name: 'Tesla Model 3 Long Range RWD', leaseExVat: 5797, benefit: 5340 },
-  { name: 'Tesla Model Y RWD', leaseExVat: 4857, benefit: 5077 },
-  { name: 'Tesla Model Y Long Range RWD', leaseExVat: 6663, benefit: 5820 }
+  { name: 'Tesla Model 3 RWD (Black)', leaseExVat: 4857, benefit: 4616 },
+  { name: 'Tesla Model 3 Long Range RWD (Black)', leaseExVat: 5797, benefit: 5208 },
+  { name: 'Tesla Model 3 RWD (White)', leaseExVat: 4700, benefit: 4419 },
+  { name: 'Tesla Model 3 Long Range RWD (White)', leaseExVat: 5640, benefit: 5011 },
+  { name: 'Tesla Model Y RWD (White)', leaseExVat: 4857, benefit: 4945 },
+  { name: 'Tesla Model Y Long Range RWD (White)', leaseExVat: 6507, benefit: 5491 }
 ];
 const fmt = n => new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 0 }).format(Math.round(n)) + ' kr';
 const pct = n => Number(n) / 100;
