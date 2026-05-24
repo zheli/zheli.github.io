@@ -92,10 +92,10 @@
         <h2>Editable assumptions</h2>
         <div class="input-row"><label>Car profile <span class="hint">Pre-fill lease fee and förmånsvärde</span></label><select id="carProfile"></select></div>
         <div class="input-row"><label>Gross salary before change (bruttolön) <span class="hint">Current base salary</span></label><input id="salary" type="number" value="40000" step="100" /></div>
-        <div class="input-row"><label>Salary reduction (lönereduktion) <span class="hint">Example: reduce 40k → 37k means 3,000</span></label><input id="salaryReduction" type="number" value="0" step="100" /></div>
+        <div class="input-row"><label>Salary reduction (lönereduktion) <span class="hint">Example: reduce 40k → 36k means 4,000</span></label><input id="salaryReduction" type="number" value="4000" step="100" /></div>
         <div class="input-row"><label>Monthly lease ex VAT (leasing ex moms) <span class="hint">Tesla quoted lease before VAT</span></label><input id="leaseExVat" type="number" value="4857" step="50" /></div>
         <div class="input-row"><label>Car förmånsvärde (bilförmån) <span class="hint">Taxable car benefit before nettolöneavdrag</span></label><input id="benefit" type="number" value="4748" step="50" /></div>
-        <div class="input-row"><label>Nettolöneavdrag <span class="hint">Post-tax salary deduction paid back to company</span></label><input id="netDeduction" type="number" value="3000" step="100" /></div>
+        <div class="input-row"><label>Nettolöneavdrag <span class="hint">Post-tax salary deduction paid back to company</span></label><input id="netDeduction" type="number" value="0" step="100" /></div>
         <div class="input-row"><label>Current old car monthly cost (privat bilkostnad) <span class="hint">Private after-tax cost removed if sold</span></label><input id="oldCarCost" type="number" value="3000" step="100" /></div>
         <div class="input-row"><label>Insurance paid by company (försäkring) <span class="hint">Estimate for company car</span></label><input id="insurance" type="number" value="500" step="100" /></div>
         <div class="input-row"><label>Maintenance/service/tires (underhåll/service/däck) <span class="hint">Monthly average paid by company</span></label><input id="maintenance" type="number" value="500" step="100" /></div>
@@ -108,11 +108,11 @@
         <h2>Scenario sliders</h2>
         <div class="slider-row">
           <div class="slider-head"><label for="netDeductionSlider">Nettolöneavdrag</label><span class="value-pill" id="netDeductionPill"></span></div>
-          <input id="netDeductionSlider" type="range" min="0" max="8000" value="3000" step="100" />
+          <input id="netDeductionSlider" type="range" min="0" max="8000" value="0" step="100" />
         </div>
         <div class="slider-row">
           <div class="slider-head"><label for="salaryReductionSlider">Salary reduction (lönereduktion)</label><span class="value-pill" id="salaryReductionPill"></span></div>
-          <input id="salaryReductionSlider" type="range" min="0" max="10000" value="0" step="100" />
+          <input id="salaryReductionSlider" type="range" min="0" max="10000" value="4000" step="100" />
         </div>
 
         <div class="section four">
