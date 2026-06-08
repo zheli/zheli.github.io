@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>London Trip Proposal — June 11–16</title>
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('mdReportTheme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      var lang = localStorage.getItem('mdReportLang') || 'en';
+      document.documentElement.setAttribute('data-lang', lang);
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root {
+    --fg: #1f2328;
+    --muted: #57606a;
+    --bg: #ffffff;
+    --panel: #f6f8fa;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --accent-on: #ffffff;
+    --accent-soft: #ddf4ff;
+    --accent-soft-border: #54aeff;
+    --warn: #9a6700;
+    --warn-soft: #fff8c5;
+    --warn-border: #d4a72c;
+    --good: #1a7f37;
+    --good-soft: #dafbe1;
+    --good-border: #4ac26b;
+    --code-bg: #f6f8fa;
+    --pill-bg: #ddf4ff;
+    --pill-fg: #0969da;
+    --pill-good-bg: #dafbe1;
+    --pill-good-fg: #1a7f37;
+    --pill-warn-bg: #fff8c5;
+    --pill-warn-fg: #9a6700;
+    --btn-bg: #f6f8fa;
+    --btn-fg: #1f2328;
+    --btn-border: #d0d7de;
+    --shadow: 0 1px 2px rgba(31, 35, 40, 0.06);
+    --day-bg: #f0f7ff;
+    --day-border: #b6d4fe;
+  }
+  html[data-theme="dark"] {
+    --fg: #e6edf3;
+    --muted: #9198a1;
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --accent: #4493f8;
+    --accent-on: #0d1117;
+    --accent-soft: #0c2d6b;
+    --accent-soft-border: #1f6feb;
+    --warn: #e3b341;
+    --warn-soft: #3a2c00;
+    --warn-border: #9e6a03;
+    --good: #3fb950;
+    --good-soft: #0f2f1a;
+    --good-border: #238636;
+    --code-bg: #161b22;
+    --pill-bg: #0c2d6b;
+    --pill-fg: #79c0ff;
+    --pill-good-bg: #0f2f1a;
+    --pill-good-fg: #3fb950;
+    --pill-warn-bg: #3a2c00;
+    --pill-warn-fg: #e3b341;
+    --btn-bg: #161b22;
+    --btn-fg: #e6edf3;
+    --btn-border: #30363d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --day-bg: #0c2d6b;
+    --day-border: #1f6feb;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 1px solid var(--btn-border);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .theme-toggle .icon { width: 14px; height: 14px; display: inline-block; }
+  html[data-theme="dark"] .theme-toggle .icon-sun { display: inline-block; }
+  html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  html:not([data-theme="dark"]) .theme-toggle .icon-sun { display: none; }
+  html:not([data-theme="dark"]) .theme-toggle .icon-moon { display: inline-block; }
+
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    line-height: 1.25;
+  }
+  header.page .sub {
+    color: var(--muted);
+    font-size: 14px;
+  }
+  header.page .sub span { margin-right: 16px; }
+
+  h2 {
+    margin: 48px 0 12px;
+    font-size: 22px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  h3 {
+    margin: 28px 0 8px;
+    font-size: 17px;
+  }
+  p { margin: 8px 0 12px; }
+  ul, ol { margin: 8px 0 12px; padding-left: 24px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); }
+
+  .tldr {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0 24px;
+  }
+  .tldr strong { color: var(--accent); }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .panel.warn { background: var(--warn-soft); border-color: var(--warn-border); }
+  .panel.good { background: var(--good-soft); border-color: var(--good-border); }
+  .panel h3 { margin-top: 0; }
+
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+    background: var(--pill-bg);
+    color: var(--pill-fg);
+  }
+  .pill.good { background: var(--pill-good-bg); color: var(--pill-good-fg); }
+  .pill.warn { background: var(--pill-warn-bg); color: var(--pill-warn-fg); }
+
+  .day-card {
+    background: var(--day-bg);
+    border: 1px solid var(--day-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 18px 0;
+  }
+  .day-card h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+  }
+  .day-card ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .day-card li {
+    margin: 5px 0;
+  }
+  .day-card .time-block {
+    margin-top: 12px;
+  }
+  .day-card .time-block:first-of-type {
+    margin-top: 0;
+  }
+  .day-card .time-label {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .flight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+  }
+  .flight-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .flight-box .direction {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .flight-box .route {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .flight-box .detail {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .cost-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .cost-table th, .cost-table td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .cost-table th { background: var(--panel); font-weight: 600; }
+  .cost-table tr.total td { font-weight: 700; background: var(--panel); }
+
+  .station-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .station-chip {
+    background: var(--good-soft);
+    border: 1px solid var(--good-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .station-chip strong { display: block; margin-bottom: 2px; }
+  .station-chip .note { color: var(--muted); font-size: 13px; }
+  .station-warn {
+    background: var(--warn-soft);
+    border: 1px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .table-scroll { overflow-x: auto; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer.page a { color: var(--accent); }
+
+  @media (max-width: 520px) {
+    .wrap { padding: 64px 16px 64px; }
+    header.page h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    .theme-toggle { padding: 6px 10px; font-size: 12px; }
+    .flight-grid { grid-template-columns: 1fr; }
+    .station-grid { grid-template-columns: 1fr; }
+  }
+  /* Interactive map */
+  #trip-map {
+    height: 480px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin: 16px 0 24px;
+    z-index: 0;
+  }
+  html[data-theme="dark"] #trip-map {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  html[data-theme="dark"] #trip-map .leaflet-popup-content-wrapper,
+  html[data-theme="dark"] #trip-map .leaflet-popup-tip {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .map-legend {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.8;
+    box-shadow: var(--shadow);
+  }
+  .map-legend .legend-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .map-legend .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .map-legend .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .map-zoom-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    color: var(--fg);
+  }
+  .map-zoom-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Language toggle */
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 100px;
+    z-index: 100;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 1px solid var(--btn-border);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .lang-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  html[data-lang="en"] .lang-zh,
+  html[data-lang="zh"] .lang-en,
+  html:not([data-lang]) .lang-zh { display: none; }
+
+  @media (max-width: 520px) {
+    .lang-toggle { right: auto; left: 16px; padding: 6px 10px; font-size: 12px; }
+  }
+
+  @media print {
+    .theme-toggle { display: none; }
+    .lang-toggle { display: none; }
+    #trip-map { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    a { color: inherit; text-decoration: underline; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to Chinese">
+  <span class="lang-label">中文</span>
+</button>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+  <svg class="icon icon-moon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 0a6 6 0 0 0 9.32 7.5A8 8 0 1 1 8.5.68 6 6 0 0 0 6 0z"/></svg>
+  <svg class="icon icon-sun" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1.5A4.5 4.5 0 1 0 8 3.5a4.5 4.5 0 0 0 0 9zM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0zm0 13a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13zM0 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 8zm13 0a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 13 8zM2.34 2.34a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 0 1-1.06 1.06L2.34 3.4a.75.75 0 0 1 0-1.06zm9.2 9.2a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 1 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 0-1.06zM2.34 13.66a.75.75 0 0 1 0-1.06l1.06-1.06a.75.75 0 1 1 1.06 1.06l-1.06 1.06a.75.75 0 0 1-1.06 0zm9.2-9.2a.75.75 0 0 1 0-1.06L12.6 2.34a.75.75 0 1 1 1.06 1.06L12.6 4.46a.75.75 0 0 1-1.06 0z"/></svg>
+  <span class="label">Theme</span>
+</button>
+
+<div class="wrap">
+
+<header class="page lang-en">
+  <h1>London Trip Proposal <span class="pill">June 11&ndash;16, 2026</span></h1>
+  <div class="sub">
+    <span><strong>Duration:</strong> 6 days / 5 nights</span>
+    <span><strong>Pace:</strong> ~2 stops per day</span>
+    <span><strong>Style:</strong> Low-stress, central London</span>
+  </div>
+</header>
+
+<header class="page lang-zh">
+  <h1>伦敦旅行方案 <span class="pill">2026年6月11日–16日</span></h1>
+  <div class="sub">
+    <span><strong>时长：</strong>6天5晚</span>
+    <span><strong>节奏：</strong>每天约2个景点</span>
+    <span><strong>风格：</strong>轻松、市中心</span>
+  </div>
+</header>
+
+<div class="tldr lang-en">
+  <strong>TL;DR.</strong> A relaxed 6-day London trip with Windsor Castle, Tower of London, British Museum, and Westminster as the main anchors. Designed for comfort with a 73-year-old mom &mdash; flat walks, seated breaks, and plenty of rest built in.
+</div>
+
+<div class="tldr lang-zh">
+  <strong>概要：</strong>轻松的6天伦敦之旅，主要景点为温莎城堡、伦敦塔、大英博物馆和威斯敏斯特。专为73岁妈妈设计 — 平坦路线、有座位休息、充足休息时间。
+</div>
+
+<div class="lang-en">
+<!-- ====== Flights ====== -->
+<h2>Flight Info</h2>
+<div class="flight-grid">
+  <div class="flight-box">
+    <div class="direction">Outbound</div>
+    <div class="route">FR 965 &middot; Gothenburg Landvetter &rarr; London Stansted</div>
+    <div class="detail">Thu, June 11 &middot; Depart 08:00 &rarr; Arrive 08:55</div>
+  </div>
+  <div class="flight-box">
+    <div class="direction">Return</div>
+    <div class="route">FR 966 &middot; London Stansted &rarr; Gothenburg Landvetter</div>
+    <div class="detail">Tue, June 16 &middot; Depart 07:35 &rarr; Arrive 10:25</div>
+  </div>
+</div>
+<p style="color: var(--muted); font-size: 14px;">The first day is a good fit for a gentle arrival: keep things light, do only a short outing if energy allows, and plan to check in later before anything bigger.</p>
+
+</div>
+
+<div class="lang-zh">
+<h2>航班信息</h2>
+<div class="flight-grid">
+  <div class="flight-box">
+    <div class="direction">去程</div>
+    <div class="route">FR 965 &middot; 哥德堡兰德维特 &rarr; 伦敦斯坦斯特德</div>
+    <div class="detail">6月11日（周四）&middot; 起飞 08:00 &rarr; 到达 08:55</div>
+  </div>
+  <div class="flight-box">
+    <div class="direction">回程</div>
+    <div class="route">FR 966 &middot; 伦敦斯坦斯特德 &rarr; 哥德堡兰德维特</div>
+    <div class="detail">6月16日（周二）&middot; 起飞 07:35 &rarr; 到达 10:25</div>
+  </div>
+</div>
+<p style="color: var(--muted); font-size: 14px;">第一天适合轻松抵达：保持简单，精力允许的话短暂外出，计划稍晚再入住。</p>
+</div>
+
+<!-- ====== Day-by-day ====== -->
+<h2 class="lang-en">Suggested Relaxed 6-Day Shape</h2>
+<h2 class="lang-zh">建议的轻松6天行程</h2>
+
+<div id="trip-map"></div>
+
+<div class="lang-en">
+<!-- Day 1 -->
+<div class="day-card">
+  <h3>Thursday, June 11 &mdash; Day 1: Arrival &amp; Gentle Introduction</h3>
+  <p style="color: var(--muted); font-size: 14px; margin-top:0;"><strong>Theme:</strong> Low-energy, maximum seating, minimal walking, built-in rest. Perfect for a 73-year-old mom.</p>
+
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">Day 1 timeline:</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>Time</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>08:55 AM</td><td>Arrive at Stansted Airport</td></tr>
+      <tr><td>~10:00&ndash;10:30 AM</td><td>Arrive in central London (Stansted Express or coach)</td></tr>
+      <tr><td>~10:30&ndash;11:00 AM</td><td>Drop bags at Bounce luggage storage near Westminster</td></tr>
+      <tr><td>~11:00 AM &ndash; 1:00 PM</td><td>St James’s Park &mdash; sit by the lake, relax</td></tr>
+      <tr><td>~1:30&ndash;2:30 PM</td><td>Uber Boat / Thames Clippers from Westminster Pier</td></tr>
+      <tr><td>~3:00 PM</td><td>Check in at the Airbnb (Tothill House, Vincent Street)</td></tr>
+      <tr><td>3:00&ndash;6:00 PM</td><td>Unpack, rest, nap</td></tr>
+      <tr><td>~6:00 PM</td><td>Dinner nearby (Westminster / Victoria)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="time-block">
+    <div class="time-label">~10:30&ndash;11:00 AM &middot; Arrival &amp; luggage drop</div>
+    <ul>
+      <li>Arrive at Stansted and head into central London.</li>
+      <li>For comfort, use the <strong>Stansted Express</strong> to Liverpool Street (~47 min), a <strong>National Express coach</strong> to Victoria (~90 min), or a <strong>pre-booked taxi/transfer</strong>.</li>
+      <li>Drop bags at a <strong>Bounce luggage storage</strong> spot near Westminster/Victoria, ideally booked in advance through the app.</li>
+      <li>If convenient, pick a location near <strong>Buckingham Palace Road</strong> or <strong>Tachbrook Street Market</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">~11:00 AM &ndash; 1:00 PM &middot; St James's Park</div>
+    <ul>
+      <li>Keep the first stop flat and easy.</li>
+      <li>Sit by the lake, enjoy the views toward Buckingham Palace, and take as many breaks as needed.</li>
+      <li>If you want a snack or tea, stop at <strong>St James's Park Caf&eacute;</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">~1:30&ndash;2:30 PM &middot; Uber Boat by Thames Clippers</div>
+    <ul>
+      <li>Walk or taxi to <strong>Westminster Pier</strong> for a relaxed river ride.</li>
+      <li>A short eastbound cruise offers seated sightseeing with landmark views and very little effort.</li>
+      <li>Use the Uber app for booking/payment if needed.</li>
+    </ul>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">By 2:30&ndash;3:00 PM &middot; Check-in at the Airbnb</div>
+    <ul>
+      <li>Collect luggage and head to <strong>33 Tothill House, Vincent Street, SW1P 4DQ</strong>.</li>
+      <li>Check in at <strong>3:00 PM</strong> and use the rest of the afternoon to unpack and rest.</li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top: 14px; border-left: 4px solid var(--accent);">
+    <h3>Getting to the apartment &amp; check-in tips</h3>
+    <ul style="margin:0;">
+      <li><strong>By Tube:</strong> The closest station is <strong>Pimlico</strong> (Victoria line), about 8&ndash;10 minutes&rsquo; walk. The next closest is <strong>St James&rsquo;s Park</strong> (Circle &amp; District lines), about 10&ndash;12 minutes&rsquo; walk.</li>
+      <li><strong>Do NOT navigate to &ldquo;Tothill House, Vincent Street&rdquo; in Google Maps</strong> &mdash; it may take you to the wrong spot. Instead, navigate to <strong>&ldquo;Regency Cafe&rdquo;</strong> on the corner of Regency Street &amp; Page Street to pick up your keys first: <a href="https://maps.app.goo.gl/6x1qbakgx45Fnkc2A?g_st=ipc" target="_blank">Google Maps link</a>. Regency Cafe is just a landmark &mdash; you don&rsquo;t need to enter or talk to staff; simply arrive at that point and follow the check-in instructions to collect your keys and find the apartment.</li>
+      <li><strong>Read through the check-in instructions in advance</strong> and keep them handy on your phone at the time of check-in.</li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top: 14px;">
+    <h3>House manual &mdash; Heating</h3>
+    <p style="margin:0;">For heating, switch on the <strong>&ldquo;Boiler switch&rdquo;</strong> on the kitchen inner wall, if not already ON. That&rsquo;s it &mdash; nothing else is needed.</p>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">Evening (~6:00 PM onward)</div>
+    <ul>
+      <li>Keep dinner simple and nearby, ideally around Westminster/Victoria.</li>
+      <li>Aim for an early night so she is refreshed for Windsor Castle on Friday.</li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top: 14px;">
+    <h3>Key comfort tips</h3>
+    <ul style="margin:0;">
+      <li>Keep walking minimal and flat.</li>
+      <li>Build in lots of seated breaks.</li>
+      <li>Use a taxi or Uber anytime a leg feels tiring.</li>
+      <li>June weather is usually mild, but bring layers and check the forecast.</li>
+      <li>Download the <strong>Uber</strong> and <strong>Bounce</strong> apps ahead of time.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Day 2 -->
+<div class="day-card">
+  <h3>Friday, June 12 &mdash; Day 2: Royals, Tower &amp; Borough Market</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">Full day timeline:</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>Time</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>~8:30&ndash;9:00 AM</td><td>Breakfast near Tothill House</td></tr>
+      <tr><td>~9:15&ndash;10:15 AM</td><td>Westminster Abbey (book 9:30 AM timed entry)</td></tr>
+      <tr><td>~10:30 AM</td><td>Walk to St James’s Park / Buckingham Palace</td></tr>
+      <tr><td>11:00 AM</td><td>Changing of the Guard (full ceremony)</td></tr>
+      <tr><td>~11:45 AM &ndash; 12:30 PM</td><td>Lunch + rest in St James’s Park or nearby caf&eacute;</td></tr>
+      <tr><td>~1:00&ndash;1:30 PM</td><td>Short Tube or taxi to Tower Hill</td></tr>
+      <tr><td>1:30&ndash;3:30 PM</td><td>Tower of London (timed entry) &mdash; focus on Crown Jewels + highlights</td></tr>
+      <tr><td>~3:30&ndash;4:00 PM</td><td>Walk across Tower Bridge (short, scenic)</td></tr>
+      <tr><td>~4:00&ndash;5:30 PM</td><td>Borough Market for early dinner (10&ndash;20 min gentle walk from Tower Bridge)</td></tr>
+      <tr><td>~5:30&ndash;6:00 PM</td><td>Taxi or Thames boat back to Westminster / Tothill House</td></tr>
+      <tr><td>Evening</td><td>Rest at the apartment (optional light snack if needed)</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li><strong>Westminster Abbey</strong> is a short walk from the apartment; book a <strong>9:30 AM timed entry</strong>.</li>
+    <li><strong>11:00 AM</strong>: <strong>Changing of the Guard</strong> at Buckingham Palace (confirmed for Friday June 12 &mdash; F Company Scots Guards with the Band of the Coldstream Guards). Great views from St James’s Park without long standing.</li>
+    <li>After the ceremony, rest and have lunch in <strong>St James’s Park</strong> or a nearby caf&eacute; before heading east.</li>
+    <li><strong>Tower of London</strong> (book timed entry for ~1:30 PM). Focus on Crown Jewels, Beefeaters, and highlights. Plenty of seating inside; take your time (about 2 hours).</li>
+    <li>Walk across <strong>Tower Bridge</strong> &mdash; short, flat, and scenic.</li>
+    <li><strong>Borough Market</strong> for early dinner (Friday hours: 10:00 AM &ndash; 5:00 PM). Just a 10&ndash;20 minute gentle walk from Tower Bridge along the river. Ground level, lots of seating, diverse food options. Focus on a few favourite stalls. Look for seating near Southwark Cathedral or the surrounding caf&eacute;s.</li>
+    <li>Taxi or Thames Clippers boat back to Westminster when ready.</li>
+  </ul>
+
+  <div class="panel" style="margin-top: 14px;">
+    <h3>Why Borough Market works well</h3>
+    <ul style="margin:0;">
+      <li><strong>Friday hours:</strong> 10:00 AM &ndash; 5:00 PM (perfect timing for early dinner).</li>
+      <li><strong>Location:</strong> 10&ndash;20 min flat walk from Tower Bridge along the river.</li>
+      <li><strong>Senior-friendly:</strong> Ground level (no stairs), lots of seating, diverse food (bread, cheeses, seafood, pastries, hot meals).</li>
+      <li><strong>If tired:</strong> Shorten the market visit or take a taxi directly there and back.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Day 3 -->
+<div class="day-card">
+  <h3>Saturday, June 13 &mdash; Day 3: Windsor Castle Day</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">Suggested timeline to catch the 11:00 AM guard change:</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>Time</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>~8:30 AM</td><td>Leave the Airbnb; taxi/Uber to Paddington (~20 min)</td></tr>
+      <tr><td>~9:00 AM</td><td>Train from Paddington to Windsor &amp; Eton Central (~35 min via Slough)</td></tr>
+      <tr><td>~9:45 AM</td><td>Arrive Windsor station; 10-min flat walk to the castle</td></tr>
+      <tr><td>10:00 AM</td><td>Castle opens &mdash; enter, explore the grounds, find a good spot</td></tr>
+      <tr><td>11:00 AM</td><td>Changing of the Guard begins</td></tr>
+      <tr><td>~11:45 AM</td><td>Ceremony ends &mdash; continue with State Apartments, St. George’s Chapel</td></tr>
+      <tr><td>~1:00&ndash;1:30 PM</td><td>Lunch in Windsor town</td></tr>
+      <tr><td>~2:30&ndash;3:30 PM</td><td>Train back to London; rest at the apartment</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>Use <strong>contactless payment or a rail ticket</strong> for the journey (Oyster does not cover Windsor).</li>
+    <li><strong>11:00 AM</strong>: <strong>Changing of the Guard</strong> at Windsor Castle (confirmed for Saturday June 13 &mdash; F Company Scots Guards with Pipes of Number 12 Company Irish Guards). This is a full guard change with music.</li>
+    <li>The castle is currently listed as <strong>open 10:00 AM&ndash;5:15 PM</strong>, with <strong>last admission around 4:00 PM</strong>; still check the day-of page in case hours shift.</li>
+    <li>Book tickets ahead online if possible (adult tickets are around <strong>&pound;32</strong> in advance). If mobility or access is a concern, check concession options and <strong>free companion tickets</strong> where applicable.</li>
+    <li>Prioritize the <strong>State Apartments</strong>, <strong>St. George’s Chapel</strong>, and the grounds.</li>
+    <li>Accessibility is good, with lifts and wheelchairs available; take it slowly and use seating as needed.</li>
+    <li>Have lunch in <strong>Windsor town</strong> if you want a quieter break, then head back to London by <strong>mid/late afternoon</strong> for rest.</li>
+  </ul>
+</div>
+
+<!-- Day 4 -->
+<div class="day-card">
+  <h3>Sunday, June 14 &mdash; Day 4: British Museum &amp; Bloomsbury</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">Suggested timeline:</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>Time</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>~9:30 AM</td><td>Leave the Airbnb; breakfast on the way</td></tr>
+      <tr><td>~10:00&ndash;10:30 AM</td><td>Arrive at the British Museum (Tube/taxi)</td></tr>
+      <tr><td>10:30 AM&ndash;12:30 PM</td><td>Museum highlights &mdash; Rosetta Stone, Egyptian collection, Great Court</td></tr>
+      <tr><td>~12:30&ndash;1:30 PM</td><td>Lunch at museum caf&eacute; or walk 5 min to <strong>Rock and Sole Plaice</strong> (fish &amp; chips, Covent Garden)</td></tr>
+      <tr><td>~1:30&ndash;3:00 PM</td><td>Russell Square or gentle stroll through Bloomsbury</td></tr>
+      <tr><td>~3:00&ndash;4:30 PM</td><td>Afternoon tea (if energy allows)</td></tr>
+      <tr><td>~5:00 PM</td><td>Back at the apartment for rest</td></tr>
+      <tr><td>~6:30 PM</td><td>Dinner at <strong>The George</strong> (55 Great Portland St, W1W 7LQ) &mdash; 10-min walk from the museum</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>Use the morning for the <strong>British Museum</strong> and only do the highlights.</li>
+    <li>Good target list: Rosetta Stone, Egyptian collection, then stop for a rest in the <strong>Great Court</strong> or museum caf&eacute;.</li>
+    <li>For lunch, consider <strong>Rock and Sole Plaice</strong> (47 Endell St, WC2H 9AJ) &mdash; London’s oldest fish and chips shop, just a 5-minute walk from the museum in Covent Garden.</li>
+    <li>General admission is free; <strong>prebooking a timed ticket is a good idea</strong> for the smoothest entry in June.</li>
+    <li>In the afternoon, take a break in <strong>Russell Square</strong> or a gentle stroll through <strong>Bloomsbury</strong>.</li>
+    <li>Finish with <strong>afternoon tea</strong> nearby if energy allows.</li>
+    <li>If museum energy is low, this can become a caf&eacute;-and-park day instead.</li>
+    <li>For dinner, try <strong>The George</strong> (55 Great Portland St, W1W 7LQ) &mdash; a classic pub in Fitzrovia, about 10 minutes’ walk from the museum.</li>
+  </ul>
+</div>
+
+<!-- Day 5 -->
+<div class="day-card">
+  <h3>Monday, June 15 &mdash; Day 5: Cambridge Day Trip</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">Suggested timeline:</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>Time</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>~8:30&ndash;9:00 AM</td><td>Leave the Airbnb; taxi/Tube to King’s Cross</td></tr>
+      <tr><td>~9:00&ndash;9:30 AM</td><td>Train to Cambridge (~50&ndash;70 min)</td></tr>
+      <tr><td>~10:00&ndash;10:30 AM</td><td>Arrive Cambridge; walk into town centre</td></tr>
+      <tr><td>~10:30 AM&ndash;12:00 PM</td><td>King’s College Chapel, The Backs</td></tr>
+      <tr><td>~12:00&ndash;1:00 PM</td><td>Lunch at a caf&eacute; or market square</td></tr>
+      <tr><td>~1:00&ndash;2:30 PM</td><td>Punting boat tour on the River Cam (seated, relaxing)</td></tr>
+      <tr><td>~3:00&ndash;3:30 PM</td><td>Wander colleges or rest in a caf&eacute;</td></tr>
+      <tr><td>~4:00&ndash;5:00 PM</td><td>Train back to London</td></tr>
+      <tr><td>~6:00 PM</td><td>Rest at the apartment; dinner nearby</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>Train from <strong>King’s Cross</strong> or <strong>Liverpool Street</strong> (~50&ndash;70 min, frequent services). Leave ~08:30&ndash;09:30 AM for ~10:00&ndash;11:00 AM arrival.</li>
+    <li>Highlights (gentle pace):
+      <ul>
+        <li><strong>King’s College Chapel</strong> (exterior + interior if open).</li>
+        <li><strong>The Backs</strong> (scenic grassy river views &mdash; very flat and beautiful).</li>
+        <li>Optional <strong>punting boat tour</strong> on the River Cam (seated, relaxing, highly recommended for your mom).</li>
+        <li>Colleges, market square, and caf&eacute;s for lunch.</li>
+      </ul>
+    </li>
+    <li>Return train by <strong>4&ndash;6 PM</strong>. Rest at the apartment in the evening.</li>
+  </ul>
+</div>
+
+<!-- Day 6 -->
+<div class="day-card" style="background: var(--warn-soft); border-color: var(--warn-border);">
+  <h3>Tuesday, June 16 &mdash; Day 6: Departure Day</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">Departure timeline:</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>Time</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>~3:30&ndash;4:00 AM</td><td>Leave the Airbnb</td></tr>
+      <tr><td>~5:00&ndash;5:30 AM</td><td>Arrive at Stansted Airport</td></tr>
+      <tr><td>5:30 AM</td><td>Check in / security</td></tr>
+      <tr><td>7:35 AM</td><td>Flight FR 966 departs</td></tr>
+      <tr><td>10:25 AM</td><td>Arrive Gothenburg Landvetter</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>The <strong>07:35 AM</strong> flight means being at Stansted by <strong>~05:30 AM</strong>.</li>
+    <li>From the Airbnb (Vincent Street, SW1P 4DQ), plan to leave by <strong>~03:30&ndash;04:00 AM</strong>.</li>
+    <li>Best options: a <strong>pre-booked taxi/transfer</strong> (~1.5&ndash;2 hours depending on traffic) or a <strong>National Express night coach</strong> from <strong>Victoria Coach Station</strong> (~90 min, runs through the night).</li>
+    <li>Book transport the night before to avoid stress.</li>
+    <li>If there is any spare time before leaving, keep it to coffee and a quiet final sit-down rather than sightseeing.</li>
+  </ul>
+
+  <div class="panel" style="margin-top: 14px; border-left: 4px solid var(--warn-border);">
+    <h3>Before you leave the apartment</h3>
+    <ol style="margin:0; padding-left: 20px;">
+      <li><strong>Throw trash away</strong> &mdash; it would be helpful (completely optional) to throw trash in the large bins in the communal area. No sorting needed &mdash; toss all in.</li>
+      <li><strong>Turn things off</strong> &mdash; but please <strong>do NOT turn off the boiler switch</strong> on the kitchen wall. Leave it as it is.</li>
+      <li><strong>Lock up</strong> &mdash; pull the apartment door on your way out and it will lock itself. Make sure it&rsquo;s fully locked. Don&rsquo;t forget to carry the keys with you.</li>
+      <li><strong>Return keys</strong> &mdash; return the keys to where you got them:
+        <ul>
+          <li><strong>Lockbox</strong> &rarr; put them back (code: 2011)</li>
+          <li><strong>Store</strong> &rarr; hand back to the storekeeper and say &ldquo;Keynest drop-off&rdquo;</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+</div>
+
+</div>
+
+<div class="lang-zh">
+
+<!-- Day 1 ZH -->
+<div class="day-card">
+  <h3>周四，6月11日 — 第1天：抵达 &amp; 轻松认识伦敦</h3>
+  <p style="color: var(--muted); font-size: 14px; margin-top:0;"><strong>主题：</strong>低体力消耗、有充分座位、最少步行、有充足休息。非常适合73岁的妈妈。</p>
+
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">第1天时间表：</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>时间</th><th>安排</th></tr></thead>
+    <tbody>
+      <tr><td>08:55</td><td>到达斯坦斯特德机场</td></tr>
+      <tr><td>约10:00&ndash;10:30</td><td>到达伦敦市中心（斯坦斯特德快线或巴士）</td></tr>
+      <tr><td>约10:30&ndash;11:00</td><td>在威斯敏斯特附近Bounce寄存行李</td></tr>
+      <tr><td>约11:00&ndash;下午1:00</td><td>圣詹姆斯公园 &mdash; 湖边休息</td></tr>
+      <tr><td>约下午1:30&ndash;2:30</td><td>从威斯敏斯特码头乘泰晤士快船</td></tr>
+      <tr><td>下午3:00</td><td>入住Airbnb（Tothill House, Vincent Street）</td></tr>
+      <tr><td>下午3:00&ndash;6:00</td><td>整理行李、休息</td></tr>
+      <tr><td>约下午6:00</td><td>晚餐（威斯敏斯特/维多利亚附近）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="time-block">
+    <div class="time-label">约10:30&ndash;11:00 &middot; 到达 &amp; 寄存行李</div>
+    <ul>
+      <li>到达斯坦斯特德机场后前往伦敦市中心。</li>
+      <li>舒适选择：<strong>Stansted Express（斯坦斯特德快线）</strong>到利物浦街站（约47分钟），<strong>National Express 长途巴士</strong>到维多利亚站（约90分钟），或<strong>提前预约的出租车</strong>。</li>
+      <li>在威斯敏斯特/维多利亚附近的 <strong>Bounce 行李寄存点</strong>存放行李，建议通过app提前预订。</li>
+      <li>如果方便，选择<strong>白金汉宫路</strong>或 <strong>Tachbrook Street Market</strong> 附近的寄存点。</li>
+    </ul>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">约11:00 &ndash; 下午1:00 &middot; 圣詹姆斯公园</div>
+    <ul>
+      <li>第一站保持平坦轻松。</li>
+      <li>坐在湖边，欣赏白金汉宫方向的景色，随时休息。</li>
+      <li>想吃东西或喝茶，可以去<strong>圣詹姆斯公园咖啡馆</strong>。</li>
+    </ul>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">约下午1:30&ndash;2:30 &middot; Uber Boat 泰晤士快船</div>
+    <ul>
+      <li>步行或打车到<strong>威斯敏斯特码头</strong>，享受轻松的河上游览。</li>
+      <li>向东的短途游船提供坐着观光的体验，几乎不需要体力。</li>
+      <li>如需要可以用 Uber app 购票/支付。</li>
+    </ul>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">下午2:30&ndash;3:00前 &middot; 入住Airbnb</div>
+    <ul>
+      <li>取回行李，前往 <strong>33 Tothill House, Vincent Street, SW1P 4DQ</strong>。</li>
+      <li><strong>下午3:00</strong> 入住，之后整理行李和休息。</li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top: 14px; border-left: 4px solid var(--accent);">
+    <h3>如何到达公寓 &amp; 入住提示</h3>
+    <ul style="margin:0;">
+      <li><strong>地铁：</strong>最近的站是 <strong>Pimlico站</strong>（Victoria线），步行约8&ndash;10分钟。其次是 <strong>St James&rsquo;s Park站</strong>（Circle和District线），步行约10&ndash;12分钟。</li>
+      <li><strong>不要在Google Maps中直接导航到&ldquo;Tothill House, Vincent Street&rdquo;</strong> &mdash; 可能会带你到错误的位置。请导航到 <strong>&ldquo;Regency Cafe&rdquo;</strong>（Regency Street和Page Street路口）先取钥匙：<a href="https://maps.app.goo.gl/6x1qbakgx45Fnkc2A?g_st=ipc" target="_blank">Google Maps链接</a>。Regency Cafe只是一个地标参考点 &mdash; 不需要进店或和店员说话；到达那个位置后按照入住指引取钥匙和进入公寓。</li>
+      <li><strong>请提前阅读入住指引</strong>，入住时把指引放在手机上方便查看。</li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top: 14px;">
+    <h3>房屋手册 &mdash; 暖气</h3>
+    <p style="margin:0;">如需暖气，打开厨房内墙上的<strong>&ldquo;Boiler switch&rdquo;（锅炉开关）</strong>，如果还没有开的话。就这样 &mdash; 不需要其他操作。</p>
+  </div>
+
+  <div class="time-block">
+    <div class="time-label">晚上（约6:00起）</div>
+    <ul>
+      <li>晚餐简单就近解决，在威斯敏斯特/维多利亚附近。</li>
+      <li>争取早点休息，为第二天养精蓄锐。</li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top: 14px;">
+    <h3>舒适小贴士</h3>
+    <ul style="margin:0;">
+      <li>步行保持最少且平坦。</li>
+      <li>安排充分的坐歇时间。</li>
+      <li>任何感觉累的路段随时打车或叫Uber。</li>
+      <li>六月天气通常温和，但带上外套并查看天气预报。</li>
+      <li>提前下载 <strong>Uber</strong> 和 <strong>Bounce</strong> app。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Day 2 ZH -->
+<div class="day-card">
+  <h3>周五，6月12日 — 第2天：皇家景点、伦敦塔 &amp; Borough Market</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">全天时间表：</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>时间</th><th>安排</th></tr></thead>
+    <tbody>
+      <tr><td>约8:30–9:00</td><td>在Tothill House附近吃早餐</td></tr>
+      <tr><td>约9:15–10:15</td><td>威斯敏斯特大教堂（预订9:30定时入场票）</td></tr>
+      <tr><td>约10:30</td><td>步行到圣詹姆斯公园 / 白金汉宫</td></tr>
+      <tr><td>11:00</td><td>换岗仪式（完整仪式）</td></tr>
+      <tr><td>约11:45 – 12:30</td><td>在圣詹姆斯公园或附近咖啡馆午餐 + 休息</td></tr>
+      <tr><td>约1:00–1:30</td><td>地铁或打车到Tower Hill</td></tr>
+      <tr><td>1:30–3:30</td><td>伦敦塔（定时入场）— 重点看皇冠珠宝 + 主要展品</td></tr>
+      <tr><td>约3:30–4:00</td><td>步行过塔桥（短途，风景很好）</td></tr>
+      <tr><td>约4:00–5:30</td><td>Borough Market 早晚餐（从塔桥步行10–20分钟）</td></tr>
+      <tr><td>约5:30–6:00</td><td>打车或泰晤士河游船回威斯敏斯特 / Tothill House</td></tr>
+      <tr><td>晚上</td><td>在公寓休息（需要的话可以吃点小吃）</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li><strong>威斯敏斯特大教堂</strong>离公寓步行即到；预订 <strong>9:30定时入场票</strong>。</li>
+    <li><strong>上午11:00</strong>：<strong>白金汉宫换岗仪式</strong>（已确认6月12日周五 — F连苏格兰近卫团，伴奏为冷溪近卫团军乐队）。从圣詹姆斯公园观看效果很好。</li>
+    <li>仪式结束后，在<strong>圣詹姆斯公园</strong>或附近咖啡馆休息和午餐，然后前往东部。</li>
+    <li><strong>伦敦塔</strong>（预订约下午1:30的定时入场票）。重点看皇冠珠宝、御用侍从卫士和主要展品。室内座位充足；慢慢参观（约2小时）。</li>
+    <li>步行过<strong>塔桥</strong> — 短途、平坦、风景很好。</li>
+    <li><strong>Borough Market</strong> 早晚餐（周五开放时间：10:00–17:00）。从塔桥沿河步行10–20分钟。地面层，座位充足，食物种类丰富。选几个喜欢的摆位就好。可以在南华克大教堂附近找座位。</li>
+    <li>准备好后打车或乘泰晤士快船回威斯敏斯特。</li>
+  </ul>
+
+  <div class="panel" style="margin-top: 14px;">
+    <h3>为什么Borough Market很合适</h3>
+    <ul style="margin:0;">
+      <li><strong>周五开放时间：</strong>10:00–17:00（早晚餐时间刚好）。</li>
+      <li><strong>位置：</strong>从塔桥沿河步行10–20分钟，平坦好走。</li>
+      <li><strong>适合老人：</strong>地面层（无台阶），座位充足，食物种类丰富（面包、奶酪、海鲜、糕点、热食）。</li>
+      <li><strong>如果累了：</strong>缩短市场参观时间，或直接打车到市场再回来。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Day 3 ZH -->
+<div class="day-card">
+  <h3>周六，6月13日 — 第3天：温莎城堡日</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">赶上11:00换岗仪式的建议时间表：</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>时间</th><th>安排</th></tr></thead>
+    <tbody>
+      <tr><td>约8:30</td><td>从Airbnb出发；打车/Uber到帕丁顿站（约20分钟）</td></tr>
+      <tr><td>约9:00</td><td>从帕丁顿乘火车到Windsor & Eton Central（约35分钟，经Slough）</td></tr>
+      <tr><td>约9:45</td><td>到达温莎站；10分钟平路步行到城堡</td></tr>
+      <tr><td>10:00</td><td>城堡开门 &mdash; 进入参观，找好观看仪式的位置</td></tr>
+      <tr><td>11:00</td><td>换岗仪式开始</td></tr>
+      <tr><td>约11:45</td><td>仪式结束 &mdash; 继续参观国家公寓、圣乔治礼拜堂</td></tr>
+      <tr><td>约1:00–1:30</td><td>在温莎小镇午餐</td></tr>
+      <tr><td>约2:30–3:30</td><td>乘火车回伦敦；回公寓休息</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>使用<strong>感应支付或火车票</strong>购票（Oyster卡不覆盖温莎）。</li>
+    <li><strong>上午11:00</strong>：<strong>温莎城堡换岗仪式</strong>（已确认6月13日周六 — F连苏格兰近卫团，伴奏为第12连爱尔兰近卫团风笛队）。完整换岗仪式，有音乐。</li>
+    <li>城堡<strong>开放时间10:00&ndash;17:15</strong>，<strong>最后入场约16:00</strong>；出发当天再确认。</li>
+    <li>尽量提前网上购票（成人票约 <strong>&pound;32</strong>）。查看优惠票和<strong>免费陪同票</strong>选项。</li>
+    <li>重点参观<strong>国家公寓</strong>、<strong>圣乔治礼拜堂</strong>和庭院。</li>
+    <li>无障碍设施良好，有电梯和轮椅；慢慢来。</li>
+    <li>在<strong>温莎小镇</strong>午餐，然后<strong>下午中晚时段</strong>回伦敦休息。</li>
+  </ul>
+</div>
+
+<!-- Day 4 ZH -->
+<div class="day-card">
+  <h3>周日，6月14日 — 第4天：大英博物馆 &amp; 布卢姆斯伯里</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">建议时间表：</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>时间</th><th>安排</th></tr></thead>
+    <tbody>
+      <tr><td>约9:30</td><td>从Airbnb出发；路上吃早餐</td></tr>
+      <tr><td>约10:00&ndash;10:30</td><td>到达大英博物馆（地铁/打车）</td></tr>
+      <tr><td>10:30&ndash;12:30</td><td>博物馆重点 &mdash; 罗塞塔石碑、埃及馆、大中庭</td></tr>
+      <tr><td>约12:30&ndash;1:30</td><td>在博物馆咖啡馆或步行5分钟到 <strong>Rock and Sole Plaice</strong>（炒鱼薯条，科文特花园）</td></tr>
+      <tr><td>约1:30&ndash;3:00</td><td>罗素广场或布卢姆斯伯里轻松散步</td></tr>
+      <tr><td>约3:00&ndash;4:30</td><td>下午茶（如精力允许）</td></tr>
+      <tr><td>约5:00</td><td>回公寓休息</td></tr>
+      <tr><td>约6:30</td><td>在 <strong>The George</strong>（55 Great Portland St, W1W 7LQ）晚餐 &mdash; 离博物馆步行10分钟</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>上午参观<strong>大英博物馆</strong>，只看重点展品。</li>
+    <li>推荐：罗塞塔石碑、埃及馆，然后在<strong>大中庭</strong>或博物馆咖啡馆休息。</li>
+    <li>午餐可以考虑 <strong>Rock and Sole Plaice</strong>（47 Endell St, WC2H 9AJ）&mdash; 伦敦最老的炒鱼薯条店，离博物馆步行仅5分钟，在科文特花园。</li>
+    <li>基本门票免费；<strong>提前预订定时入场券</strong>在六月是个好主意。</li>
+    <li>下午在<strong>罗素广场</strong>休息，或在<strong>布卢姆斯伯里</strong>轻松散步。</li>
+    <li>如果精力允许，来一次<strong>下午茶</strong>。</li>
+    <li>如果博物馆看累了，可以变成咖啡馆+公园日。</li>
+    <li>晚餐可以去 <strong>The George</strong>（55 Great Portland St, W1W 7LQ）&mdash; Fitzrovia的经典酒吧，离博物馆约10分钟步行。</li>
+  </ul>
+</div>
+
+<!-- Day 5 ZH -->
+<div class="day-card">
+  <h3>周一，6月15日 — 第5天：剑桥一日游</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">建议时间表：</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>时间</th><th>安排</th></tr></thead>
+    <tbody>
+      <tr><td>约8:30–9:00</td><td>从Airbnb出发；打车/地铁到国王十字站</td></tr>
+      <tr><td>约9:00–9:30</td><td>火车到剑桥（约50–70分钟）</td></tr>
+      <tr><td>约10:00–10:30</td><td>到达剑桥；步行进入市中心</td></tr>
+      <tr><td>约10:30–12:00</td><td>国王学院礼拜堂、The Backs</td></tr>
+      <tr><td>约12:00–1:00</td><td>在咖啡馆或集市广场午餐</td></tr>
+      <tr><td>约1:00–2:30</td><td>剑河撑篳船游览（坐着、放松）</td></tr>
+      <tr><td>约3:00–3:30</td><td>逛学院或在咖啡馆休息</td></tr>
+      <tr><td>约4:00–5:00</td><td>火车回伦敦</td></tr>
+      <tr><td>约6:00</td><td>回公寓休息；附近晚餐</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>从<strong>国王十字站</strong>或<strong>利物浦街站</strong>乘火车（约50–70分钟，班次频繁）。约08:30–09:30出发。</li>
+    <li>亮点（轻松节奏）：
+      <ul>
+        <li><strong>国王学院礼拜堂</strong>（外观+内部）。</li>
+        <li><strong>The Backs</strong>（风景优美的河畔草地 — 非常平坦漂亮）。</li>
+        <li>可选<strong>撑篳船游览</strong>剑河（坐着、放松，强烈推荐给妈妈）。</li>
+        <li>学院、集市广场和咖啡馆午餐。</li>
+      </ul>
+    </li>
+    <li>下午4–6点回程火车。晚上在公寓休息。</li>
+  </ul>
+</div>
+
+<!-- Day 6 ZH -->
+<div class="day-card" style="background: var(--warn-soft); border-color: var(--warn-border);">
+  <h3>周二，6月16日 — 第6天：离开日</h3>
+  <p style="font-weight:600; color: var(--accent); font-size:14px; margin-bottom:8px;">离开日时间表：</p>
+  <table class="cost-table" style="margin:0 0 14px; font-size:14px;">
+    <thead><tr><th>时间</th><th>安排</th></tr></thead>
+    <tbody>
+      <tr><td>约3:30&ndash;4:00</td><td>从Airbnb出发</td></tr>
+      <tr><td>约5:00&ndash;5:30</td><td>到达斯坦斯特德机场</td></tr>
+      <tr><td>5:30</td><td>办理值机/安检</td></tr>
+      <tr><td>7:35</td><td>FR 966航班起飞</td></tr>
+      <tr><td>10:25</td><td>到达哥德堡兰德维特</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li><strong>07:35</strong> 的航班意味着要在<strong>约05:30前</strong>到达斯坦斯特德机场。</li>
+    <li>从Airbnb（Vincent Street, SW1P 4DQ）出发，计划<strong>约03:30&ndash;04:00</strong>出门。</li>
+    <li>最佳选择：<strong>提前预约的出租车</strong>（约1.5&ndash;2小时），或从<strong>维多利亚长途汽车站</strong>乘 <strong>National Express 夜间巴士</strong>（约90分钟，通宵运行）。</li>
+    <li>前一晚预订好交通工具。</li>
+    <li>离开前有空余时间，喝杯咖啡安静坐坐就好。</li>
+  </ul>
+
+  <div class="panel" style="margin-top: 14px; border-left: 4px solid var(--warn-border);">
+    <h3>离开公寓前</h3>
+    <ol style="margin:0; padding-left: 20px;">
+      <li><strong>扔垃圾</strong> &mdash; 如果方便（完全可选），把垃圾扔到公共区域的大垃圾箱里。不需要分类 &mdash; 全部扔进去就好。</li>
+      <li><strong>关闭电器</strong> &mdash; 但请<strong>不要关闭</strong>厨房墙上的锅炉开关（Boiler switch）。保持原样即可。</li>
+      <li><strong>锁门</strong> &mdash; 出门时拉上公寓门，门会自动上锁。确保完全锁好。别忘了带上钥匙。</li>
+      <li><strong>归还钥匙</strong> &mdash; 把钥匙还到取钥匙的地方：
+        <ul>
+          <li><strong>密码锁盒</strong> &rarr; 放回去（密码：2011）</li>
+          <li><strong>商店</strong> &rarr; 交还给店员，说&ldquo;Keynest drop-off&rdquo;</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+</div>
+
+</div>
+
+<div class="lang-en">
+<!-- ====== Accessibility ====== -->
+<h2>Accessibility &amp; Step-Free Stations</h2>
+<div class="station-grid">
+  <div class="station-chip">
+    <strong>Westminster</strong>
+    <span class="note">Step-free (Day 5)</span>
+  </div>
+  <div class="station-chip">
+    <strong>Tower Hill</strong>
+    <span class="note">Step-free (Day 2, Tower of London)</span>
+  </div>
+  <div class="station-chip">
+    <strong>King's Cross St Pancras</strong>
+    <span class="note">Step-free (near British Museum, Day 4)</span>
+  </div>
+  <div class="station-chip">
+    <strong>Liverpool Street</strong>
+    <span class="note">Step-free (Stansted Express terminus)</span>
+  </div>
+</div>
+<div class="station-warn">
+  Many older stations (e.g., Russell Square, Covent Garden) are <strong>not</strong> step-free &mdash; use bus or taxi as alternatives.
+</div>
+
+<!-- ====== Book in Advance ====== -->
+<h2>Book in Advance</h2>
+<div class="table-scroll">
+<table class="cost-table">
+  <thead>
+    <tr><th>What</th><th>Day</th><th>Type</th><th>Link / Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Windsor Castle tickets</td><td>Day 3 (Sat June 13)</td><td>Timed entry, ~&pound;32/person</td><td>Book at rct.uk; check concession &amp; free companion options</td></tr>
+    <tr><td>Tower of London tickets</td><td>Day 2 (Fri June 12)</td><td>Timed entry, ~&pound;33.60/person</td><td>Book at hrp.org.uk</td></tr>
+    <tr><td>Westminster Abbey tickets</td><td>Day 2 (Fri June 12)</td><td>Timed entry, ~&pound;27/person</td><td>Book at westminster-abbey.org</td></tr>
+    <tr><td>British Museum timed entry</td><td>Day 4 (Sun June 14)</td><td>Free, but prebook slot</td><td>Book at britishmuseum.org</td></tr>
+    <tr><td>Bounce luggage storage</td><td>Day 1 (Thu June 11)</td><td>Reserve a drop-off spot</td><td>Book via Bounce app near Westminster/Victoria</td></tr>
+    <tr><td>Stansted Airport transfer</td><td>Day 1 arrival / Day 6 departure</td><td>Pre-booked taxi or National Express coach</td><td>Book National Express at nationalexpress.com or arrange private transfer</td></tr>
+    <tr><td>Afternoon tea reservation</td><td>Day 4 (Sun June 14)</td><td>Restaurant booking</td><td>Book at chosen venue; popular spots fill up in June</td></tr>
+    <tr><td>Thames Clippers boat ticket</td><td>Day 1 (Thu June 11)</td><td>~&pound;8&ndash;10 one way</td><td>Can buy via Uber app or at the pier; no advance booking required but contactless works on board</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ====== Costs ====== -->
+<h2>Rough Cost Notes (Per Person)</h2>
+<div class="table-scroll">
+<table class="cost-table">
+  <thead>
+    <tr><th>Item</th><th>Cost</th><th>Note</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Windsor Castle</td><td>~&pound;32</td><td>Book online</td></tr>
+    <tr><td>Tower of London</td><td>~&pound;33.60</td><td>Book online</td></tr>
+    <tr><td>Tower Bridge Exhibition</td><td>~&pound;12.30</td><td>Optional</td></tr>
+    <tr><td>British Museum</td><td>Free</td><td>Prebook timed ticket</td></tr>
+    <tr><td>Stansted Express</td><td>~&pound;20&ndash;28</td><td>Return</td></tr>
+    <tr><td>Thames Clippers</td><td>~&pound;8&ndash;10</td><td>One way</td></tr>
+    <tr><td>Daily transport (Zones 1&ndash;2 cap)</td><td>~&pound;8.10/day &times; 5</td><td>&asymp; &pound;40.50</td></tr>
+    <tr><td>Afternoon tea</td><td>~&pound;25&ndash;60</td><td>Depending on venue</td></tr>
+    <tr><td>Meals (estimate)</td><td>~&pound;20&ndash;40/day &times; 6</td><td>&asymp; &pound;120&ndash;240</td></tr>
+    <tr class="total"><td>Estimated total</td><td colspan="2">~&pound;290&ndash;460 (excluding flights &amp; accommodation)</td></tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+<div class="lang-zh">
+
+<!-- Accessibility ZH -->
+<h2>无障碍 &amp; 无台阶车站</h2>
+<div class="station-grid">
+  <div class="station-chip">
+    <strong>Westminster（威斯敏斯特）</strong>
+    <span class="note">无台阶（第5天）</span>
+  </div>
+  <div class="station-chip">
+    <strong>Tower Hill（塔丘）</strong>
+    <span class="note">无台阶（第2天，伦敦塔）</span>
+  </div>
+  <div class="station-chip">
+    <strong>King’s Cross St Pancras</strong>
+    <span class="note">无台阶（靠近大英博物馆，第4天）</span>
+  </div>
+  <div class="station-chip">
+    <strong>Liverpool Street（利物浦街）</strong>
+    <span class="note">无台阶（斯坦斯特德快线终点站）</span>
+  </div>
+</div>
+<div class="station-warn">
+  许多老车站（如 Russell Square、Covent Garden）<strong>没有</strong>无台阶设施 &mdash; 可以改乘公交或打车。
+</div>
+
+<!-- Book in Advance ZH -->
+<h2>需要提前预订的项目</h2>
+<div class="table-scroll">
+<table class="cost-table">
+  <thead>
+    <tr><th>项目</th><th>日期</th><th>类型</th><th>备注</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>温莎城堡门票</td><td>第3天（6月13日周六）</td><td>定时入场，约&pound;32/人</td><td>在 rct.uk 预订；查看优惠票和免费陪同票</td></tr>
+    <tr><td>伦敦塔门票</td><td>第2天（6月12日周五）</td><td>定时入场，约&pound;33.60/人</td><td>在 hrp.org.uk 预订</td></tr>
+    <tr><td>威斯敏斯特大教堂门票</td><td>第2天（周五6月12日）</td><td>定时入场，约&pound;27/人</td><td>在 westminster-abbey.org 预订</td></tr>
+    <tr><td>大英博物馆定时入场</td><td>第4天（6月14日周日）</td><td>免费，但需预约</td><td>在 britishmuseum.org 预订</td></tr>
+    <tr><td>Bounce 行李寄存</td><td>第1天（6月11日周四）</td><td>预约寄存点</td><td>通过 Bounce app 预订</td></tr>
+    <tr><td>斯坦斯特德机场接送</td><td>第1天到达 / 第6天离开</td><td>出租车或 National Express</td><td>在 nationalexpress.com 预订或安排私人接送</td></tr>
+    <tr><td>下午茶预订</td><td>第4天（6月14日周日）</td><td>餐厅预订</td><td>热门地点六月会满</td></tr>
+    <tr><td>泰晤士快船船票</td><td>第1天（6月11日周四）</td><td>约&pound;8&ndash;10 单程</td><td>可通过 Uber app 或码头购买；无需提前订票</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- Costs ZH -->
+<h2>费用概算（每人）</h2>
+<div class="table-scroll">
+<table class="cost-table">
+  <thead>
+    <tr><th>项目</th><th>费用</th><th>备注</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>温莎城堡</td><td>约&pound;32</td><td>网上预订</td></tr>
+    <tr><td>伦敦塔</td><td>约&pound;33.60</td><td>网上预订</td></tr>
+    <tr><td>塔桥展览</td><td>约&pound;12.30</td><td>可选</td></tr>
+    <tr><td>大英博物馆</td><td>免费</td><td>预约定时入场</td></tr>
+    <tr><td>斯坦斯特德快线</td><td>约&pound;20&ndash;28</td><td>往返</td></tr>
+    <tr><td>泰晤士快船</td><td>约&pound;8&ndash;10</td><td>单程</td></tr>
+    <tr><td>每日交通（1&ndash;2区上限）</td><td>约&pound;8.10/天 &times; 5</td><td>&asymp; &pound;40.50</td></tr>
+    <tr><td>下午茶</td><td>约&pound;25&ndash;60</td><td>取决于场所</td></tr>
+    <tr><td>餐饮（估计）</td><td>约&pound;20&ndash;40/天 &times; 6</td><td>&asymp; &pound;120&ndash;240</td></tr>
+    <tr class="total"><td>预估总计</td><td colspan="2">约&pound;290&ndash;460（不含机票和住宿）</td></tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+<footer class="page">
+  <p>Source: <a href="./london-trip-proposal.md"><code>london-trip-proposal.md</code></a></p>
+  <p>This page is a companion artifact generated from the source markdown for easier reading.</p>
+</footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    var label = btn.querySelector('.label');
+
+    function currentTheme() {
+      return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+    function applyAria() {
+      var t = currentTheme();
+      btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      if (label) label.textContent = t === 'dark' ? 'Light' : 'Dark';
+    }
+    applyAria();
+
+    btn.addEventListener('click', function () {
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('mdReportTheme', next); } catch (e) {}
+      applyAria();
+    });
+
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var listener = function (e) {
+        try {
+          if (localStorage.getItem('mdReportTheme')) return;
+        } catch (err) {}
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        applyAria();
+      };
+      if (mq.addEventListener) mq.addEventListener('change', listener);
+      else if (mq.addListener) mq.addListener(listener);
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    var btn = document.getElementById('langToggle');
+    if (!btn) return;
+    var label = btn.querySelector('.lang-label');
+
+    function currentLang() {
+      return document.documentElement.getAttribute('data-lang') || 'en';
+    }
+    function applyLang() {
+      var lang = currentLang();
+      btn.setAttribute('aria-label', lang === 'en' ? 'Switch to Chinese' : 'Switch to English');
+      if (label) label.textContent = lang === 'en' ? '中文' : 'EN';
+    }
+
+    // Restore saved language
+    try {
+      var saved = localStorage.getItem('mdReportLang');
+      if (saved) document.documentElement.setAttribute('data-lang', saved);
+    } catch (e) {}
+    applyLang();
+
+    btn.addEventListener('click', function () {
+      var next = currentLang() === 'en' ? 'zh' : 'en';
+      document.documentElement.setAttribute('data-lang', next);
+      try { localStorage.setItem('mdReportLang', next); } catch (e) {}
+      applyLang();
+    });
+  })();
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+(function () {
+  // Day colors
+  var colors = {
+    1: '#2563eb', // blue
+    2: '#16a34a', // green
+    3: '#ea580c', // orange
+    4: '#9333ea', // purple
+    5: '#dc2626', // red
+    6: '#6b7280'  // gray
+  };
+  var dayLabels = {
+    1: 'Day 1 — Arrival',
+    2: 'Day 2 — Royals, Tower & Borough Market',
+    3: 'Day 3 — Windsor',
+    4: 'Day 4 — British Museum',
+    5: 'Day 5 — Cambridge Day Trip',
+    6: 'Day 6 — Departure'
+  };
+
+  var locations = [
+    // Day 1
+    { day: 1, name: 'Stansted Airport', lat: 51.885, lng: 0.235 },
+    { day: 1, name: 'Liverpool Street Station', lat: 51.518, lng: -0.081 },
+    { day: 1, name: 'Victoria Coach Station', lat: 51.492, lng: -0.148 },
+    { day: 1, name: 'St James\'s Park', lat: 51.502, lng: -0.135 },
+    { day: 1, name: 'Westminster Pier', lat: 51.501, lng: -0.122 },
+    { day: 1, name: 'Airbnb — 33 Tothill House, Vincent St', lat: 51.494, lng: -0.129 },
+    // Day 2
+    { day: 3, name: 'Windsor Castle', lat: 51.484, lng: -0.604 },
+    { day: 3, name: 'Paddington Station', lat: 51.516, lng: -0.176 },
+    // Day 3
+    { day: 2, name: 'Tower of London', lat: 51.508, lng: -0.076 },
+    { day: 2, name: 'Tower Bridge', lat: 51.505, lng: -0.075 },
+    { day: 2, name: 'Westminster Abbey', lat: 51.499, lng: -0.127 },
+    { day: 2, name: 'Buckingham Palace', lat: 51.501, lng: -0.142 },
+
+    // Day 4
+    { day: 4, name: 'British Museum', lat: 51.519, lng: -0.127 },
+    { day: 4, name: 'Russell Square', lat: 51.523, lng: -0.125 },
+    { day: 4, name: 'Rock and Sole Plaice (fish & chips)', lat: 51.514, lng: -0.124 },
+    { day: 4, name: 'The George (pub, dinner)', lat: 51.521, lng: -0.143 },
+    { day: 2, name: 'Borough Market', lat: 51.505, lng: -0.091 },
+    // Day 5
+    { day: 5, name: 'Cambridge — King\'s College', lat: 52.204, lng: 0.117 },
+    { day: 5, name: 'King\'s Cross Station', lat: 51.530, lng: -0.123 },
+    // Day 6
+    { day: 6, name: 'Stansted Airport (departure)', lat: 51.886, lng: 0.236 }
+  ];
+
+  // Central London bounds (for "Zoom to London" button)
+  var londonBounds = L.latLngBounds(
+    L.latLng(51.48, -0.22),
+    L.latLng(51.54, -0.06)
+  );
+
+  // All locations bounds
+  var allCoords = locations.map(function (loc) { return [loc.lat, loc.lng]; });
+  var allBounds = L.latLngBounds(allCoords);
+
+  // Initialize map
+  var map = L.map('trip-map', { scrollWheelZoom: false }).fitBounds(allBounds.pad(0.1));
+
+  var tileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+  var tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>';
+  L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+
+  // Add markers
+  locations.forEach(function (loc) {
+    var marker = L.circleMarker([loc.lat, loc.lng], {
+      radius: 8,
+      fillColor: colors[loc.day],
+      color: '#fff',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.85
+    }).addTo(map);
+    marker.bindPopup(
+      '<strong style="font-size:13px;">' + loc.name + '</strong><br>' +
+      '<span style="color:' + colors[loc.day] + '; font-weight:600; font-size:12px;">' + dayLabels[loc.day] + '</span>'
+    );
+  });
+
+  // Legend control
+  var legend = L.control({ position: 'bottomright' });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create('div', 'map-legend');
+    var html = '<div class="legend-title">Trip Days</div>';
+    for (var d = 1; d <= 6; d++) {
+      html += '<div class="legend-row">' +
+        '<span class="legend-dot" style="background:' + colors[d] + ';"></span>' +
+        '<span>' + dayLabels[d] + '</span></div>';
+    }
+    div.innerHTML = html;
+    return div;
+  };
+  legend.addTo(map);
+
+  // Zoom controls
+  var zoomControl = L.control({ position: 'topright' });
+  zoomControl.onAdd = function () {
+    var container = L.DomUtil.create('div');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '4px';
+
+    var btnLondon = L.DomUtil.create('button', 'map-zoom-btn', container);
+    btnLondon.textContent = 'Central London';
+    btnLondon.title = 'Zoom to central London';
+    L.DomEvent.disableClickPropagation(btnLondon);
+    btnLondon.addEventListener('click', function () {
+      map.fitBounds(londonBounds, { padding: [20, 20] });
+    });
+
+    var btnAll = L.DomUtil.create('button', 'map-zoom-btn', container);
+    btnAll.textContent = 'All Locations';
+    btnAll.title = 'Zoom to fit all locations';
+    L.DomEvent.disableClickPropagation(btnAll);
+    btnAll.addEventListener('click', function () {
+      map.fitBounds(allBounds.pad(0.1));
+    });
+
+    return container;
+  };
+  zoomControl.addTo(map);
+
+  // Hook into existing theme toggle to invalidate map size (filter change can need a re-render)
+  var themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      setTimeout(function () { map.invalidateSize(); }, 50);
+    });
+  }
+})();
+</script>
+</body>
+</html>
